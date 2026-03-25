@@ -6,7 +6,7 @@
 ![Distribution](https://img.shields.io/badge/distribution-app%20%7C%20dmg%20%7C%20zip-0f766e)
 ![Version](https://img.shields.io/badge/version-v1.0.0-f59e0b)
 
-一个面向 `macOS` 的悟空邀请码抓取与自动填入工具仓库。  
+一个面向 `macOS` 的悟空邀请码抓取与自动填入工具。  
 A macOS-focused utility for fetching Wukong invite-code images, running OCR, and filling the recognized code back into `Wukong.app`.
 
 ![Wukong Invite Grabber overview](docs/images/github-overview.png)
