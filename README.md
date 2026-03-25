@@ -158,6 +158,10 @@ WUKONG_CODESIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)" \
 - `wukong-invite-grabber-macOS-1.0.0.dmg`
 - `wukong-invite-grabber-macOS-1.0.0.app.zip`
 
+当前 release：
+
+- [v1.0.0](https://github.com/wenjiazhu/wukong-invite-grabber/releases/tag/v1.0.0)
+
 适用边界：
 
 - `ad-hoc` 签名只适合本地或受控环境
@@ -352,6 +356,10 @@ The intended release assets are:
 
 - `wukong-invite-grabber-macOS-1.0.0.dmg`
 - `wukong-invite-grabber-macOS-1.0.0.app.zip`
+
+Current release:
+
+- [v1.0.0](https://github.com/wenjiazhu/wukong-invite-grabber/releases/tag/v1.0.0)
 
 Distribution boundaries:
 
