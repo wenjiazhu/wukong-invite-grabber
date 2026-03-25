@@ -1,0 +1,14 @@
+.ace-tool/
+
+# macOS noise
+.DS_Store
+
+# Build outputs
+mac-app/dist/
+mac-standalone/dist/
+mac-assets/build/
+
+# Python caches
+__pycache__/
+*.py[cod]
+tools/.cache/

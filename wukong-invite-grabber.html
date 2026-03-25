@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>悟空邀请码抓取页</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+SC:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: rgba(255, 252, 248, 0.86);
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: rgba(120, 113, 108, 0.18);
+      --accent: #c2410c;
+      --accent-strong: #9a3412;
+      --shadow: 0 22px 50px rgba(120, 53, 15, 0.14);
+      --success: #166534;
+      --warning: #b45309;
+      --error: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans SC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(251, 191, 36, 0.45), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.24), transparent 26%),
+        linear-gradient(160deg, #fff7ed 0%, #fffaf3 48%, #fff1e6 100%);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    .hero,
+    .card {
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 237, 0.78));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p,
+    .footer-note,
+    .card-subtitle,
+    .tip-list {
+      color: var(--muted);
+    }
+
+    .hero p,
+    .tip-list,
+    .footer-note {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .primary-btn,
+    .ghost-btn {
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: 18px;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 14px 26px rgba(194, 65, 12, 0.28);
+    }
+
+    .ghost-btn {
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .primary-btn:hover:not(:disabled),
+    .ghost-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:disabled,
+    .ghost-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.58;
+      box-shadow: none;
+    }
+
+    .status {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .status::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.9;
+      flex: none;
+    }
+
+    .status[data-tone="working"] {
+      color: var(--accent-strong);
+      background: rgba(255, 237, 213, 0.82);
+    }
+
+    .status[data-tone="success"] {
+      color: var(--success);
+      background: rgba(220, 252, 231, 0.85);
+    }
+
+    .status[data-tone="warning"] {
+      color: var(--warning);
+      background: rgba(254, 243, 199, 0.88);
+    }
+
+    .status[data-tone="error"] {
+      color: var(--error);
+      background: rgba(254, 226, 226, 0.9);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.9fr);
+      gap: 22px;
+      margin-top: 22px;
+    }
+
+    .card {
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 22px 24px 0;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .card-subtitle {
+      margin: 6px 0 0;
+      font-size: 14px;
+    }
+
+    .preview-wrap,
+    .info-panel {
+      padding: 24px;
+    }
+
+    .preview-frame {
+      display: grid;
+      place-items: center;
+      min-height: 350px;
+      border-radius: 24px;
+      border: 1px dashed rgba(194, 65, 12, 0.26);
+      background:
+        linear-gradient(135deg, rgba(255, 247, 237, 0.92), rgba(255, 255, 255, 0.94)),
+        radial-gradient(circle at top, rgba(251, 191, 36, 0.12), transparent 36%);
+      overflow: hidden;
+    }
+
+    .preview-stage {
+      display: grid;
+      place-items: center;
+      width: min(100%, 780px);
+      min-height: 220px;
+      padding: 24px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 34%),
+        linear-gradient(180deg, #1f2937, #0f172a);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .preview-stage img {
+      max-width: 100%;
+      height: auto;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.38));
+    }
+
+    .placeholder {
+      width: min(460px, 100%);
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .placeholder strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    .preview-link {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--accent-strong);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .info-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .code-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .code-input {
+      width: 100%;
+      min-height: 56px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font: 700 18px/1 "Space Grotesk", "IBM Plex Sans SC", sans-serif;
+      letter-spacing: 0.06em;
+    }
+
+    .code-input:focus {
+      outline: 2px solid rgba(194, 65, 12, 0.22);
+      outline-offset: 0;
+    }
+
+    .raw-text {
+      min-height: 180px;
+      margin: 0;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(41, 37, 36, 0.96);
+      color: #fde68a;
+      font: 500 13px/1.6 "Space Grotesk", monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .tip-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        width: min(100% - 20px, 1180px);
+        padding-top: 20px;
+      }
+
+      .hero,
+      .preview-wrap,
+      .info-panel {
+        padding: 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .code-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">Wukong Invite Utility</span>
+      <h1>一键拉图，直接 OCR 邀请码。</h1>
+      <p>
+        点击主按钮后，页面会动态执行你给的远端脚本，接收其中返回的 <code>img_url</code>，
+        将邀请码图片直接贴到页面上，再针对白字透明底场景先补深色背景，再做中文优先 OCR。
+      </p>
+      <div class="actions">
+        <button class="primary-btn" id="runButton" type="button">运行脚本并加载图片</button>
+        <button class="ghost-btn" id="recognizeButton" type="button" disabled>手动识别当前图片</button>
+        <button class="ghost-btn" id="copyButton" type="button" disabled>复制邀请码</button>
+        <div class="status" id="status" data-tone="idle">等待运行。</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">邀请码图片</h2>
+            <p class="card-subtitle">脚本回调返回后，图片会直接渲染在这里。</p>
+          </div>
+        </div>
+        <div class="preview-wrap">
+          <div class="preview-frame" id="previewFrame">
+            <div class="placeholder">
+              <strong>等待远端脚本返回图片地址</strong>
+              页面会接管全局 <code>img_url(...)</code> 回调，并从中读取 <code>img_url</code> 字段。
+            </div>
+          </div>
+          <a class="preview-link" id="imageLink" href="#" target="_blank" rel="noreferrer noopener" hidden>在新标签打开图片</a>
+        </div>
+      </article>
+
+      <aside class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">OCR 输出</h2>
+            <p class="card-subtitle">自动提取后会优先复制最佳候选邀请码。</p>
+          </div>
+        </div>
+        <div class="info-panel">
+          <section>
+            <label class="field-label" for="inviteCode">邀请码</label>
+            <div class="code-row">
+              <input class="code-input" id="inviteCode" type="text" readonly placeholder="等待识别结果" />
+            </div>
+            <div class="actions" style="margin-top: 12px;">
+              <button class="ghost-btn" id="fillButton" type="button" disabled>填入悟空 App 并立即体验</button>
+              <label style="display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px;">
+                <input id="autoFillCheckbox" type="checkbox" checked />
+                识别成功后自动填入并提交
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <span class="field-label">OCR 原文</span>
+            <pre class="raw-text" id="rawText">等待 OCR。</pre>
+          </section>
+
+          <section>
+            <span class="field-label">说明</span>
+            <ul class="tip-list">
+              <li>远端脚本当前返回的是一个 <code>img_url</code> 字段，页面现在默认只加载图片，不会自动 OCR。</li>
+              <li>macOS 如已启动 <code>python3 prototype/tools/wukong_macos_ocr_bridge.py</code>，页面会优先调用系统 Vision OCR，并可在识别后自动填入悟空 App。</li>
+              <li>OCR 会先给透明白字补一层深色底，再对整图和高概率裁剪区域分别识别。</li>
+              <li>邀请码提取已改为中文优先，同时保留英文识别兜底。</li>
+              <li>自动填入依赖 macOS 的辅助功能权限；若无法点到“立即体验”，会回退成回车提交。</li>
+              <li>若本地 bridge 未启动、悟空 App 未打开，或系统未授予辅助功能权限，状态区会直接给出对应原因。</li>
+              <li>如果浏览器拦截了剪贴板写入，你仍然可以点“复制邀请码”或手动复制输入框内容。</li>
+            </ul>
+          </section>
+        </div>
+      </aside>
+    </section>
+
+    <p class="footer-note">
+      如果远端图片服务器不允许浏览器跨域读取像素，页面仍会展示图片，但浏览器 OCR 可能被安全策略阻止；macOS 本地 bridge 模式可直接下载原图并绕过这类限制。
+    </p>
+  </main>
+
+  <script>
+    (() => {
+      const INVITE_SCRIPT_URL = "https://hudong.alicdn.com/api/data/v2/438eae9715f945468d599660d2d92aeb.js";
+      const TESSERACT_CDN_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+      const MAC_OS_OCR_BRIDGE_BASE_URL = "http://127.0.0.1:8788";
+      const MAC_OS_OCR_TIMEOUT_MS = 12000;
+      const NATIVE_APP_BRIDGE_TIMEOUT_MS = 15000;
+      const MAC_OS_OCR_MAX_DIMENSION = 2200;
+      const OCR_LANGUAGE_PREFERENCES = ["chi_sim+eng", "chi_sim", "eng"];
+      const FIXED_INVITE_REGION = {
+        x: 0.425,
+        y: 0.18,
+        width: 0.31,
+        height: 0.27
+      };
+      const PREFERRED_CHINESE_CODE_LENGTH = 5;
+      const LINE_OCR_PROFILES = [
+        { language: "chi_sim", params: { tessedit_pageseg_mode: "7", user_defined_dpi: "300" } },
+        { language: "chi_sim", params: { tessedit_pageseg_mode: "13", user_defined_dpi: "300" } }
+      ];
+      const INVITE_LABEL_PATTERNS = [
+        /当前邀请码\s*[:：]?\s*([\u4e00-\u9fff]{5})/,
+        /邀请码\s*[:：]?\s*([\u4e00-\u9fff]{5})/
+      ];
+      const CJK_STOP_WORDS = new Set([
+        "限量",
+        "已领完",
+        "欢迎回来",
+        "立即体验",
+        "退出登录",
+        "刷新验证",
+        "客服咨询",
+        "悟空官网获得",
+        "悟空出世"
+      ]);
+      const SINGLE_CHAR_OCR_PROFILES = [
+        { language: "chi_sim", params: { tessedit_pageseg_mode: "10", user_defined_dpi: "300" } },
+        { language: "chi_sim+eng", params: { tessedit_pageseg_mode: "10", user_defined_dpi: "300" } }
+      ];
+      const placeholderMarkup = `
+        <div class="placeholder">
+          <strong>等待远端脚本返回图片地址</strong>
+          页面会接管全局 <code>img_url(...)</code> 回调，并从中读取 <code>img_url</code> 字段。
+        </div>
+      `;
+
+      const state = {
+        busy: false,
+        imageUrl: "",
+        recognizedCode: "",
+        rawText: ""
+      };
+      const macOcrBridgeState = {
+        checked: false,
+        available: false
+      };
+
+      const runButton = document.getElementById("runButton");
+      const recognizeButton = document.getElementById("recognizeButton");
+      const fillButton = document.getElementById("fillButton");
+      const copyButton = document.getElementById("copyButton");
+      const autoFillCheckbox = document.getElementById("autoFillCheckbox");
+      const inviteCodeInput = document.getElementById("inviteCode");
+      const rawTextEl = document.getElementById("rawText");
+      const statusEl = document.getElementById("status");
+      const previewFrame = document.getElementById("previewFrame");
+      const imageLink = document.getElementById("imageLink");
+
+      function setStatus(message, tone) {
+        statusEl.textContent = message;
+        statusEl.dataset.tone = tone || "idle";
+      }
+
+      function setBusy(nextBusy) {
+        state.busy = nextBusy;
+        runButton.disabled = nextBusy;
+        recognizeButton.disabled = nextBusy || !state.imageUrl;
+        fillButton.disabled = nextBusy || !state.recognizedCode;
+        copyButton.disabled = nextBusy || !state.recognizedCode;
+      }
+
+      function resetOutput() {
+        state.imageUrl = "";
+        state.recognizedCode = "";
+        state.rawText = "";
+        inviteCodeInput.value = "";
+        rawTextEl.textContent = "等待 OCR。";
+        previewFrame.innerHTML = placeholderMarkup;
+        imageLink.hidden = true;
+        imageLink.href = "#";
+        recognizeButton.disabled = true;
+        fillButton.disabled = true;
+        copyButton.disabled = true;
+      }
+
+      function renderImage(imageUrl) {
+        const stage = document.createElement("div");
+        stage.className = "preview-stage";
+
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "悟空邀请码图片";
+        image.decoding = "async";
+
+        previewFrame.innerHTML = "";
+        stage.appendChild(image);
+        previewFrame.appendChild(stage);
+        imageLink.href = imageUrl;
+        imageLink.hidden = false;
+      }
+
+      function isMacOS() {
+        const platform = [navigator.userAgent || "", navigator.platform || ""].join(" ");
+        return /Macintosh|Mac OS X|MacIntel/i.test(platform);
+      }
+
+      function isNativeStandaloneApp() {
+        return Boolean(
+          window.WUKONG_INVITE_NATIVE_APP &&
+          window.WukongNativeBridge &&
+          typeof window.WukongNativeBridge.invoke === "function"
+        );
+      }
+
+      function withTimeout(promise, timeoutMs, errorMessage) {
+        return new Promise((resolve, reject) => {
+          const timeoutId = window.setTimeout(() => {
+            reject(new Error(errorMessage || "操作超时。"));
+          }, timeoutMs);
+
+          Promise.resolve(promise)
+            .then((value) => {
+              window.clearTimeout(timeoutId);
+              resolve(value);
+            })
+            .catch((error) => {
+              window.clearTimeout(timeoutId);
+              reject(error);
+            });
+        });
+      }
+
+      async function callNativeAppBridge(action, payload, timeoutMs) {
+        if (!isNativeStandaloneApp()) {
+          throw new Error("独立 app 原生 bridge 不可用。");
+        }
+
+        return withTimeout(
+          window.WukongNativeBridge.invoke(action, payload || {}),
+          timeoutMs || NATIVE_APP_BRIDGE_TIMEOUT_MS,
+          "独立 app 原生 bridge 响应超时。"
+        );
+      }
+
+      async function probeMacOcrBridge(force) {
+        if (!isMacOS()) {
+          return false;
+        }
+
+        if (macOcrBridgeState.checked && !force) {
+          return macOcrBridgeState.available;
+        }
+
+        if (isNativeStandaloneApp()) {
+          try {
+            const responsePayload = await callNativeAppBridge("health", {}, 3000);
+            macOcrBridgeState.available = Boolean(responsePayload && responsePayload.ok);
+          } catch (error) {
+            macOcrBridgeState.available = false;
+          }
+
+          macOcrBridgeState.checked = true;
+          return macOcrBridgeState.available;
+        }
+
+        try {
+          const response = await fetch(`${MAC_OS_OCR_BRIDGE_BASE_URL}/health?t=${Date.now()}`, {
+            method: "GET",
+            mode: "cors",
+            cache: "no-store"
+          });
+          macOcrBridgeState.available = response.ok;
+        } catch (error) {
+          macOcrBridgeState.available = false;
+        }
+
+        macOcrBridgeState.checked = true;
+        return macOcrBridgeState.available;
+      }
+
+      function normalizeFillAppErrorMessage(message) {
+        if (!message) {
+          return "填入悟空 App 失败。";
+        }
+
+        if (/Wukong app process not found/i.test(message)) {
+          return "未检测到悟空 App 进程。请先打开悟空 App，并停留在邀请码输入页。";
+        }
+
+        if (/no visible window/i.test(message)) {
+          return "悟空 App 当前没有可操作窗口。请先切到邀请码输入页。";
+        }
+
+        if (/not authorized|not permitted|accessibility|System Events got an error|辅助访问|辅助功能|不允许辅助访问|-25211/i.test(message)) {
+          return "macOS 未授予辅助功能权限。请到“系统设置 > 隐私与安全性 > 辅助功能”里放行当前终端或 Python。";
+        }
+
+        if (/Failed to fetch|NetworkError/i.test(message)) {
+          return "本地 macOS bridge 未连接。请先运行 `python3 prototype/tools/wukong_macos_ocr_bridge.py`。";
+        }
+
+        return message;
+      }
+
+      function loadScript(src, globalName) {
+        return new Promise((resolve, reject) => {
+          if (globalName && window[globalName]) {
+            resolve(window[globalName]);
+            return;
+          }
+
+          const existing = document.querySelector(`script[data-loader="${globalName || src}"]`);
+          if (existing) {
+            existing.addEventListener("load", () => resolve(globalName ? window[globalName] : true), { once: true });
+            existing.addEventListener("error", () => reject(new Error("外部脚本加载失败。")), { once: true });
+            return;
+          }
+
+          const script = document.createElement("script");
+          script.src = src;
+          script.async = true;
+          script.dataset.loader = globalName || src;
+          script.onload = () => resolve(globalName ? window[globalName] : true);
+          script.onerror = () => reject(new Error("外部脚本加载失败。"));
+          document.head.appendChild(script);
+        });
+      }
+
+      async function ensureTesseract() {
+        if (window.Tesseract) {
+          return window.Tesseract;
+        }
+
+        await loadScript(TESSERACT_CDN_URL, "Tesseract");
+        if (!window.Tesseract) {
+          throw new Error("OCR 引擎加载失败。");
+        }
+        return window.Tesseract;
+      }
+
+      function fetchInviteImageUrl() {
+        return new Promise((resolve, reject) => {
+          const callbackName = "img_url";
+          const script = document.createElement("script");
+          const timeoutId = window.setTimeout(() => {
+            cleanup();
+            reject(new Error("目标脚本 15 秒内没有返回图片地址。"));
+          }, 15000);
+
+          function cleanup() {
+            window.clearTimeout(timeoutId);
+            script.remove();
+            if (window[callbackName] === handlePayload) {
+              delete window[callbackName];
+            }
+          }
+
+          function handlePayload(payload) {
+            const imageUrl = payload && typeof payload.img_url === "string" ? payload.img_url.trim() : "";
+            cleanup();
+
+            if (!imageUrl) {
+              reject(new Error("目标脚本已执行，但回调里没有拿到 img_url。"));
+              return;
+            }
+
+            resolve(imageUrl);
+          }
+
+          window[callbackName] = handlePayload;
+          script.src = `${INVITE_SCRIPT_URL}?t=${Date.now()}`;
+          script.async = true;
+          script.onerror = () => {
+            cleanup();
+            reject(new Error("目标脚本加载失败。"));
+          };
+          document.body.appendChild(script);
+        });
+      }
+
+      function loadImage(imageUrl) {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          image.crossOrigin = "anonymous";
+          image.referrerPolicy = "no-referrer";
+          image.onload = () => resolve(image);
+          image.onerror = () => reject(new Error("图片加载失败，无法继续 OCR。"));
+          image.src = `${imageUrl}${imageUrl.includes("?") ? "&" : "?"}t=${Date.now()}`;
+        });
+      }
+
+      function clampRegion(region, maxWidth, maxHeight) {
+        const x = Math.max(0, region.x);
+        const y = Math.max(0, region.y);
+        const width = Math.min(region.width, maxWidth - x);
+        const height = Math.min(region.height, maxHeight - y);
+
+        return {
+          x,
+          y,
+          width: Math.max(1, width),
+          height: Math.max(1, height)
+        };
+      }
+
+      function expandRegion(region, maxWidth, maxHeight, paddingXRatio, paddingYRatio) {
+        const paddingX = region.width * paddingXRatio;
+        const paddingY = region.height * paddingYRatio;
+
+        return clampRegion(
+          {
+            x: region.x - paddingX,
+            y: region.y - paddingY,
+            width: region.width + paddingX * 2,
+            height: region.height + paddingY * 2
+          },
+          maxWidth,
+          maxHeight
+        );
+      }
+
+      function detectInviteTextBounds(image, region) {
+        const scale = 4;
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(region.width * scale));
+        canvas.height = Math.max(1, Math.round(region.height * scale));
+
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        context.fillStyle = "#05070b";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.filter = "grayscale(1) contrast(240%) brightness(185%)";
+        context.drawImage(image, region.x, region.y, region.width, region.height, 0, 0, canvas.width, canvas.height);
+        context.filter = "none";
+
+        const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+        const columnHits = new Array(canvas.width).fill(0);
+        const rowHits = new Array(canvas.height).fill(0);
+
+        for (let y = 0; y < canvas.height; y += 1) {
+          for (let x = 0; x < canvas.width; x += 1) {
+            const index = (y * canvas.width + x) * 4;
+            const luminance = Math.round(data[index] * 0.3 + data[index + 1] * 0.59 + data[index + 2] * 0.11);
+            if (luminance >= 150) {
+              columnHits[x] += 1;
+              rowHits[y] += 1;
+            }
+          }
+        }
+
+        const minColumnHit = Math.max(2, Math.round(canvas.height * 0.06));
+        const minRowHit = Math.max(2, Math.round(canvas.width * 0.025));
+        let left = columnHits.findIndex((count) => count >= minColumnHit);
+        let right = columnHits.length - 1 - [...columnHits].reverse().findIndex((count) => count >= minColumnHit);
+        let top = rowHits.findIndex((count) => count >= minRowHit);
+        let bottom = rowHits.length - 1 - [...rowHits].reverse().findIndex((count) => count >= minRowHit);
+
+        if (left < 0 || right < left || top < 0 || bottom < top) {
+          return region;
+        }
+
+        const refined = {
+          x: region.x + left / scale,
+          y: region.y + top / scale,
+          width: (right - left + 1) / scale,
+          height: (bottom - top + 1) / scale
+        };
+
+        return expandRegion(refined, image.naturalWidth || image.width, image.naturalHeight || image.height, 0.04, 0.12);
+      }
+
+      function buildProjectionCanvas(image, region) {
+        const scale = 5;
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(region.width * scale));
+        canvas.height = Math.max(1, Math.round(region.height * scale));
+
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        context.fillStyle = "#05070b";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.filter = "grayscale(1) contrast(260%) brightness(195%)";
+        context.drawImage(image, region.x, region.y, region.width, region.height, 0, 0, canvas.width, canvas.height);
+        context.filter = "none";
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const { data } = imageData;
+        for (let index = 0; index < data.length; index += 4) {
+          const luminance = Math.round(data[index] * 0.3 + data[index + 1] * 0.59 + data[index + 2] * 0.11);
+          const value = luminance > 148 ? 255 : 0;
+          data[index] = value;
+          data[index + 1] = value;
+          data[index + 2] = value;
+        }
+        context.putImageData(imageData, 0, 0);
+
+        return { canvas, data, scale };
+      }
+
+      function detectCharacterBounds(image, region, expectedCount) {
+        const { canvas, data, scale } = buildProjectionCanvas(image, region);
+        const width = canvas.width;
+        const height = canvas.height;
+        const columnHits = new Array(width).fill(0);
+
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const index = (y * width + x) * 4;
+            if (data[index] === 255) {
+              columnHits[x] += 1;
+            }
+          }
+        }
+
+        const minColumnHit = Math.max(2, Math.round(height * 0.05));
+        const segments = [];
+        let start = -1;
+
+        for (let x = 0; x < width; x += 1) {
+          if (columnHits[x] >= minColumnHit) {
+            if (start < 0) {
+              start = x;
+            }
+          } else if (start >= 0) {
+            segments.push({ start, end: x - 1 });
+            start = -1;
+          }
+        }
+        if (start >= 0) {
+          segments.push({ start, end: width - 1 });
+        }
+
+        const merged = [];
+        for (const segment of segments) {
+          const last = merged[merged.length - 1];
+          if (last && segment.start - last.end <= Math.max(3, Math.round(width * 0.012))) {
+            last.end = segment.end;
+          } else {
+            merged.push({ ...segment });
+          }
+        }
+
+        const filtered = merged.filter((segment) => segment.end - segment.start + 1 >= Math.max(10, Math.round(width * 0.045)));
+        let activeSegments = filtered.length ? filtered : merged;
+
+        if (activeSegments.length > expectedCount) {
+          activeSegments = activeSegments
+            .sort((left, right) => (right.end - right.start) - (left.end - left.start))
+            .slice(0, expectedCount)
+            .sort((left, right) => left.start - right.start);
+        }
+
+        if (activeSegments.length !== expectedCount) {
+          return null;
+        }
+
+        return activeSegments.map((segment) => {
+          let top = height - 1;
+          let bottom = 0;
+          for (let y = 0; y < height; y += 1) {
+            for (let x = segment.start; x <= segment.end; x += 1) {
+              if (data[(y * width + x) * 4] === 255) {
+                if (y < top) {
+                  top = y;
+                }
+                if (y > bottom) {
+                  bottom = y;
+                }
+              }
+            }
+          }
+
+          if (bottom <= top) {
+            top = 0;
+            bottom = height - 1;
+          }
+
+          const refined = {
+            x: region.x + segment.start / scale,
+            y: region.y + top / scale,
+            width: (segment.end - segment.start + 1) / scale,
+            height: (bottom - top + 1) / scale
+          };
+
+          return expandRegion(
+            refined,
+            image.naturalWidth || image.width,
+            image.naturalHeight || image.height,
+            0.1,
+            0.14
+          );
+        });
+      }
+
+      function buildCropPlans(image) {
+        const width = image.naturalWidth || image.width;
+        const height = image.naturalHeight || image.height;
+        const fixedX = width * FIXED_INVITE_REGION.x;
+        const fixedY = height * FIXED_INVITE_REGION.y;
+        const fixedWidth = width * FIXED_INVITE_REGION.width;
+        const fixedHeight = height * FIXED_INVITE_REGION.height;
+        const baseRegion = {
+          x: fixedX,
+          y: fixedY,
+          width: fixedWidth,
+          height: fixedHeight
+        };
+        const refinedRegion = detectInviteTextBounds(image, baseRegion);
+        const expandedRegion = expandRegion(refinedRegion, width, height, 0.08, 0.18);
+        const labelRegion = clampRegion(
+          {
+            x: fixedX - fixedWidth * 0.95,
+            y: fixedY - fixedHeight * 0.12,
+            width: fixedWidth * 1.95,
+            height: fixedHeight * 1.02
+          },
+          width,
+          height
+        );
+
+        return {
+          refinedRegion,
+          plans: [
+            { label: "标签行反相", x: labelRegion.x, y: labelRegion.y, width: labelRegion.width, height: labelRegion.height, scale: 4.8, threshold: false, thresholdLevel: 154, dilate: false, invert: true, backgroundColor: "#05070b", enhanceMode: "strong" },
+            { label: "标签行反相高对比", x: labelRegion.x, y: labelRegion.y, width: labelRegion.width, height: labelRegion.height, scale: 4.8, threshold: true, thresholdLevel: 148, dilate: true, invert: true, backgroundColor: "#05070b", enhanceMode: "strong" },
+            { label: "固定邀请码框精裁", x: refinedRegion.x, y: refinedRegion.y, width: refinedRegion.width, height: refinedRegion.height, scale: 6.4, threshold: false, thresholdLevel: 154, dilate: false, invert: true, backgroundColor: "#05070b", enhanceMode: "strong" },
+            { label: "固定邀请码框精裁高对比", x: refinedRegion.x, y: refinedRegion.y, width: refinedRegion.width, height: refinedRegion.height, scale: 6.4, threshold: true, thresholdLevel: 148, dilate: true, invert: true, backgroundColor: "#05070b", enhanceMode: "strong" },
+            { label: "固定框扩展区域高对比", x: expandedRegion.x, y: expandedRegion.y, width: expandedRegion.width, height: expandedRegion.height, scale: 5.6, threshold: true, thresholdLevel: 150, dilate: true, invert: true, backgroundColor: "#05070b", enhanceMode: "strong" }
+          ]
+        };
+      }
+
+      function renderCanvas(image, plan) {
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(plan.width * plan.scale));
+        canvas.height = Math.max(1, Math.round(plan.height * plan.scale));
+
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        context.imageSmoothingEnabled = true;
+        context.fillStyle = plan.backgroundColor || "#ffffff";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(
+          image,
+          plan.x,
+          plan.y,
+          plan.width,
+          plan.height,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const { data } = imageData;
+        const contrast = plan.enhanceMode === "strong" ? 1.95 : plan.enhanceMode === "normal" ? 1.45 : 1;
+        const gamma = plan.enhanceMode === "strong" ? 0.72 : plan.enhanceMode === "normal" ? 0.88 : 1;
+
+        for (let index = 0; index < data.length; index += 4) {
+          const grayscale = Math.round(data[index] * 0.3 + data[index + 1] * 0.59 + data[index + 2] * 0.11);
+          let boosted = Math.pow(grayscale / 255, gamma) * 255;
+          boosted = (boosted - 128) * contrast + 128;
+          const normalized = Math.max(0, Math.min(255, Math.round(boosted)));
+          let value = plan.threshold ? (normalized > (plan.thresholdLevel || 154) ? 255 : 0) : normalized;
+          if (plan.invert) {
+            value = 255 - value;
+          }
+          data[index] = value;
+          data[index + 1] = value;
+          data[index + 2] = value;
+        }
+
+        if (plan.threshold && plan.dilate) {
+          const source = new Uint8ClampedArray(data);
+          const radius = 1;
+          for (let y = 0; y < canvas.height; y += 1) {
+            for (let x = 0; x < canvas.width; x += 1) {
+              const index = (y * canvas.width + x) * 4;
+              if (source[index] === 255) {
+                continue;
+              }
+
+              let found = false;
+              for (let offsetY = -radius; offsetY <= radius && !found; offsetY += 1) {
+                for (let offsetX = -radius; offsetX <= radius; offsetX += 1) {
+                  const nx = x + offsetX;
+                  const ny = y + offsetY;
+                  if (nx < 0 || ny < 0 || nx >= canvas.width || ny >= canvas.height) {
+                    continue;
+                  }
+                  if (source[(ny * canvas.width + nx) * 4] === 255) {
+                    found = true;
+                    break;
+                  }
+                }
+              }
+
+              if (found) {
+                data[index] = 255;
+                data[index + 1] = 255;
+                data[index + 2] = 255;
+              }
+            }
+          }
+        }
+
+        context.putImageData(imageData, 0, 0);
+        return canvas;
+      }
+
+      function resizeCanvasForMacOcr(sourceCanvas) {
+        const longestSide = Math.max(sourceCanvas.width, sourceCanvas.height);
+        if (longestSide <= MAC_OS_OCR_MAX_DIMENSION) {
+          return sourceCanvas;
+        }
+
+        const ratio = MAC_OS_OCR_MAX_DIMENSION / longestSide;
+        const resizedCanvas = document.createElement("canvas");
+        resizedCanvas.width = Math.max(1, Math.round(sourceCanvas.width * ratio));
+        resizedCanvas.height = Math.max(1, Math.round(sourceCanvas.height * ratio));
+        const resizedContext = resizedCanvas.getContext("2d");
+        resizedContext.imageSmoothingEnabled = true;
+        resizedContext.drawImage(sourceCanvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+        return resizedCanvas;
+      }
+
+      async function buildMacOcrVariants(imageUrl) {
+        const image = await loadImage(imageUrl);
+        const { plans } = buildCropPlans(image);
+        return plans.map((plan) => {
+          const canvas = resizeCanvasForMacOcr(renderCanvas(image, plan));
+          return {
+            label: plan.label,
+            image_data_url: canvas.toDataURL("image/png")
+          };
+        });
+      }
+
+      function scoreLatinCandidate(candidate) {
+        let score = 0;
+
+        if (candidate.length >= 5 && candidate.length <= 10) {
+          score += 5;
+        } else if (candidate.length >= 4 && candidate.length <= 14) {
+          score += 2;
+        }
+
+        if (/[A-Z]/.test(candidate)) {
+          score += 2;
+        }
+
+        if (/\d/.test(candidate)) {
+          score += 2;
+        }
+
+        if (/^[A-Z]+$/.test(candidate)) {
+          score -= 1;
+        }
+
+        if (/^[0-9]+$/.test(candidate)) {
+          score -= 2;
+        }
+
+        if (candidate.includes("HTTP") || candidate.includes("ALICDN") || candidate.includes("PNG")) {
+          score -= 8;
+        }
+
+        return score;
+      }
+
+      function scoreChineseCandidate(candidate) {
+        let score = 0;
+
+        if (candidate.length >= 4 && candidate.length <= 6) {
+          score += 8;
+        } else if (candidate.length >= 3 && candidate.length <= 8) {
+          score += 4;
+        }
+
+        if (/[\u4e00-\u9fff]/.test(candidate)) {
+          score += 5;
+        }
+
+        if (candidate.length === 5) {
+          score += 2;
+        }
+
+        if (/邀请码|当前|已领完|限量|领取|今日|剩余/.test(candidate)) {
+          score -= 10;
+        }
+
+        return score;
+      }
+
+      function extractBestCandidate(text) {
+        const normalized = text
+          .replace(/\u3000/g, " ")
+          .replace(/(?<=[\u4e00-\u9fff])[ \t]+(?=[\u4e00-\u9fff])/g, "")
+          .trim();
+
+        for (const pattern of INVITE_LABEL_PATTERNS) {
+          const match = normalized.match(pattern);
+          if (match && match[1]) {
+            return {
+              candidate: match[1].trim(),
+              score: scoreChineseCandidate(match[1].trim()) + 6
+            };
+          }
+        }
+
+        const rawTokens = normalized.match(/[\u4e00-\u9fff]{4,8}/g) || [];
+        const exactFive = [...new Set(rawTokens.map((token) => token.trim()))]
+          .filter((token) => token.length === PREFERRED_CHINESE_CODE_LENGTH && !CJK_STOP_WORDS.has(token));
+
+        if (exactFive.length === 1) {
+          return {
+            candidate: exactFive[0],
+            score: scoreChineseCandidate(exactFive[0]) + 4
+          };
+        }
+
+        const rawLines = normalized
+          .split(/\n+/)
+          .map((line) => line.replace(/\s+/g, "").trim())
+          .filter(Boolean);
+
+        const chineseCandidates = [];
+        for (const rawLine of rawLines) {
+          const line = rawLine
+            .replace(/当前邀请码[:：]?/g, "")
+            .replace(/^邀请码[:：]?/g, "")
+            .replace(/已领完.*$/g, "")
+            .replace(/限量.*$/g, "");
+
+          if (line) {
+            chineseCandidates.push(line);
+          }
+
+          const directMatches = line.match(/[\u4e00-\u9fff]{3,10}/g) || [];
+          chineseCandidates.push(...directMatches);
+
+          if (line.length > 8) {
+            for (let windowSize = 4; windowSize <= 6; windowSize += 1) {
+              for (let start = 0; start <= line.length - windowSize; start += 1) {
+                chineseCandidates.push(line.slice(start, start + windowSize));
+              }
+            }
+          }
+        }
+
+        const rankedChinese = [...new Set(chineseCandidates)]
+          .map((candidate) => ({ candidate, score: scoreChineseCandidate(candidate) }))
+          .filter((item) => item.score > 0 && !CJK_STOP_WORDS.has(item.candidate))
+          .sort((left, right) => right.score - left.score || left.candidate.length - right.candidate.length);
+
+        if (rankedChinese[0]) {
+          return rankedChinese[0];
+        }
+
+        const normalizedText = normalized
+          .toUpperCase()
+          .replace(/[^A-Z0-9]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+
+        const latinMatches = normalizedText.match(/[A-Z0-9]{4,16}/g) || [];
+        const rankedLatin = [...new Set(latinMatches)]
+          .map((candidate) => ({ candidate, score: scoreLatinCandidate(candidate) }))
+          .filter((item) => item.score > 0)
+          .sort((left, right) => right.score - left.score || left.candidate.length - right.candidate.length);
+
+        return rankedLatin[0] || { candidate: "", score: Number.NEGATIVE_INFINITY };
+      }
+
+      function normalizeChineseChars(text) {
+        return (text.match(/[\u4e00-\u9fff]/g) || []).join("");
+      }
+
+      function scoreAttempt(candidate, confidence, source) {
+        const baseScore = /[\u4e00-\u9fff]/.test(candidate)
+          ? scoreChineseCandidate(candidate)
+          : scoreLatinCandidate(candidate);
+        const confidenceBonus = (confidence || 0) / 20;
+        const sourceBonus = source === "segmented" ? 4 : source === "line" ? 0 : 0;
+        return baseScore + confidenceBonus + sourceBonus;
+      }
+
+      function buildAttemptFromRawText(rawText, label, confidence, source) {
+        const normalizedRawText = (rawText || "").trim();
+        const extracted = extractBestCandidate(normalizedRawText);
+        return {
+          candidate: extracted.candidate || "",
+          score: extracted.candidate
+            ? Math.max(extracted.score, scoreAttempt(extracted.candidate, confidence || 0, source || "line"))
+            : Number.NEGATIVE_INFINITY,
+          rawText: normalizedRawText,
+          label: label || "OCR 结果",
+          confidence: typeof confidence === "number" ? confidence : 0
+        };
+      }
+
+      function voteBestChineseCandidate(records) {
+        const candidateWeights = new Map();
+
+        for (const record of records) {
+          const candidate = record.candidate;
+          if (!candidate || candidate.length !== PREFERRED_CHINESE_CODE_LENGTH || !/^[\u4e00-\u9fff]{5}$/.test(candidate)) {
+            continue;
+          }
+
+          const weight = Math.max(1, record.score + (record.confidence || 0) / 10);
+          const current = candidateWeights.get(candidate) || { weight: 0, records: [] };
+          current.weight += weight;
+          current.records.push(record);
+          candidateWeights.set(candidate, current);
+        }
+
+        if (!candidateWeights.size) {
+          return null;
+        }
+
+        const ranked = [...candidateWeights.entries()]
+          .map(([candidate, meta]) => ({ candidate, weight: meta.weight, records: meta.records }))
+          .sort((left, right) => right.weight - left.weight);
+
+        if (ranked.length === 1) {
+          const only = ranked[0];
+          return {
+            candidate: only.candidate,
+            score: scoreChineseCandidate(only.candidate) + only.weight / 25,
+            confidence: only.weight / Math.max(1, only.records.length),
+            rawText: only.records.map((record) => record.rawText).filter(Boolean).join(" | "),
+            label: "固定框整串候选投票"
+          };
+        }
+
+        const [first, second] = ranked;
+        if (first.weight < second.weight * 1.35) {
+          return null;
+        }
+
+        return {
+          candidate: first.candidate,
+          score: scoreChineseCandidate(first.candidate) + first.weight / 25,
+          confidence: first.weight / Math.max(1, first.records.length),
+          rawText: first.records.map((record) => record.rawText).filter(Boolean).join(" | "),
+          label: "固定框整串候选投票"
+        };
+      }
+
+      async function recognizeWithProfiles(Tesseract, canvas, plan, profiles) {
+        const attempts = [];
+        let lastError = null;
+
+        for (const profile of profiles) {
+          try {
+            const result = await Tesseract.recognize(canvas, profile.language, {
+              ...profile.params,
+              logger(message) {
+                if (message.status === "recognizing text" && typeof message.progress === "number") {
+                  const percentage = Math.round(message.progress * 100);
+                  setStatus(`正在 OCR：${plan.label} ${percentage}%`, "working");
+                }
+              }
+            });
+            attempts.push({
+              rawText: (result && result.data && result.data.text ? result.data.text : "").trim(),
+              confidence: result && result.data && typeof result.data.confidence === "number" ? result.data.confidence : 0,
+              language: profile.language
+            });
+          } catch (error) {
+            lastError = error;
+          }
+        }
+
+        if (!attempts.length) {
+          throw lastError || new Error("OCR 识别失败。");
+        }
+
+        return attempts;
+      }
+
+      function buildCharacterSlices(region, count, maxWidth, maxHeight) {
+        const sliceWidth = region.width / count;
+        const slices = [];
+
+        for (let index = 0; index < count; index += 1) {
+          const start = region.x + sliceWidth * index;
+          const slice = expandRegion(
+            {
+              x: start,
+              y: region.y,
+              width: sliceWidth,
+              height: region.height
+            },
+            maxWidth,
+            maxHeight,
+            0.14,
+            0.12
+          );
+          slices.push(slice);
+        }
+
+        return slices;
+      }
+
+      async function runSegmentedOcr(Tesseract, image, region) {
+        const detectedSlices = detectCharacterBounds(image, region, PREFERRED_CHINESE_CODE_LENGTH);
+        const slices = detectedSlices || buildCharacterSlices(
+          region,
+          PREFERRED_CHINESE_CODE_LENGTH,
+          image.naturalWidth || image.width,
+          image.naturalHeight || image.height
+        );
+
+        const characters = [];
+        let combinedConfidence = 0;
+        const rawParts = [];
+
+        for (let index = 0; index < slices.length; index += 1) {
+          const slice = slices[index];
+          const variants = [
+            { label: `逐字${index + 1}`, ...slice, scale: 7.8, threshold: false, thresholdLevel: 150, dilate: false, backgroundColor: "#05070b", enhanceMode: "strong" },
+            { label: `逐字${index + 1}高对比`, ...slice, scale: 7.8, threshold: true, thresholdLevel: 146, dilate: true, backgroundColor: "#05070b", enhanceMode: "strong" },
+            { label: `逐字${index + 1}强化`, ...slice, scale: 9.0, threshold: true, thresholdLevel: 140, dilate: true, backgroundColor: "#05070b", enhanceMode: "strong" }
+          ];
+
+          let bestChar = { candidate: "", confidence: 0, rawText: "" };
+
+          for (const variant of variants) {
+            const canvas = renderCanvas(image, variant);
+            const attempts = await recognizeWithProfiles(Tesseract, canvas, variant, SINGLE_CHAR_OCR_PROFILES);
+
+            for (const attempt of attempts) {
+              const chinese = normalizeChineseChars(attempt.rawText);
+              const candidate = chinese ? chinese[0] : "";
+              if (!candidate) {
+                continue;
+              }
+
+              if (attempt.confidence >= bestChar.confidence) {
+                bestChar = {
+                  candidate,
+                  confidence: attempt.confidence,
+                  rawText: attempt.rawText
+                };
+              }
+            }
+          }
+
+          if (bestChar.candidate) {
+            characters.push(bestChar.candidate);
+            combinedConfidence += bestChar.confidence;
+            rawParts.push(bestChar.rawText || bestChar.candidate);
+          }
+        }
+
+        if (characters.length !== PREFERRED_CHINESE_CODE_LENGTH) {
+          return null;
+        }
+
+        const candidate = characters.join("");
+        return {
+          candidate,
+          score: scoreAttempt(candidate, combinedConfidence / PREFERRED_CHINESE_CODE_LENGTH, "segmented"),
+          confidence: combinedConfidence / PREFERRED_CHINESE_CODE_LENGTH,
+          rawText: rawParts.join(" | "),
+          label: "固定框逐字切片"
+        };
+      }
+
+      async function runMacSystemOcr(imageUrl) {
+        const bridgeAvailable = await probeMacOcrBridge();
+        if (!bridgeAvailable) {
+          return null;
+        }
+
+        const requestPayload = {
+          image_url: imageUrl
+        };
+        try {
+          const variants = await buildMacOcrVariants(imageUrl);
+          if (variants.length) {
+            requestPayload.variants = variants;
+          }
+        } catch (error) {
+          // Ignore browser-side preprocessing failures and let the native side
+          // fall back to downloading / recognizing the original image itself.
+        }
+
+        let responsePayload;
+        if (isNativeStandaloneApp()) {
+          responsePayload = await callNativeAppBridge("ocr", requestPayload, MAC_OS_OCR_TIMEOUT_MS);
+        } else {
+          const controller = new AbortController();
+          const timeoutId = window.setTimeout(() => controller.abort(), MAC_OS_OCR_TIMEOUT_MS);
+
+          try {
+            const response = await fetch(`${MAC_OS_OCR_BRIDGE_BASE_URL}/ocr`, {
+              method: "POST",
+              mode: "cors",
+              cache: "no-store",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(requestPayload),
+              signal: controller.signal
+            });
+
+            responsePayload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+              throw new Error(responsePayload && responsePayload.error ? responsePayload.error : "macOS OCR bridge 调用失败。");
+            }
+          } finally {
+            window.clearTimeout(timeoutId);
+          }
+        }
+
+        return buildAttemptFromRawText(
+          responsePayload && typeof responsePayload.raw_text === "string" ? responsePayload.raw_text : "",
+          responsePayload && typeof responsePayload.label === "string" ? responsePayload.label : "macOS Vision OCR",
+          responsePayload && typeof responsePayload.score === "number" ? responsePayload.score : 0,
+          "line"
+        );
+      }
+
+      async function fillWukongApp(code, submit) {
+        if (!code) {
+          throw new Error("没有可填入的识别结果。");
+        }
+
+        if (!isMacOS()) {
+          throw new Error("自动填入仅支持 macOS。");
+        }
+
+        const bridgeReady = await probeMacOcrBridge(true);
+        if (!bridgeReady) {
+          throw new Error("本地 macOS bridge 未启动。请先运行 `python3 prototype/tools/wukong_macos_ocr_bridge.py`。");
+        }
+
+        if (isNativeStandaloneApp()) {
+          try {
+            return await callNativeAppBridge("fill-app", {
+              code,
+              submit: submit !== false
+            });
+          } catch (error) {
+            const reason = error instanceof Error ? error.message : "";
+            throw new Error(normalizeFillAppErrorMessage(reason));
+          }
+        }
+
+        let response;
+        try {
+          response = await fetch(`${MAC_OS_OCR_BRIDGE_BASE_URL}/fill-app`, {
+            method: "POST",
+            mode: "cors",
+            cache: "no-store",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              code,
+              submit: submit !== false
+            })
+          });
+        } catch (error) {
+          const reason = error instanceof Error ? error.message : "";
+          throw new Error(normalizeFillAppErrorMessage(reason));
+        }
+
+        const responsePayload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const errorMessage =
+            responsePayload && typeof responsePayload.error === "string"
+              ? responsePayload.error
+              : "填入悟空 App 失败。";
+          throw new Error(normalizeFillAppErrorMessage(errorMessage));
+        }
+        return responsePayload;
+      }
+
+      async function runOcr(imageUrl) {
+        const Tesseract = await ensureTesseract();
+        const image = await loadImage(imageUrl);
+        const { plans } = buildCropPlans(image);
+
+        let bestAttempt = {
+          candidate: "",
+          score: Number.NEGATIVE_INFINITY,
+          rawText: "",
+          label: "",
+          confidence: 0
+        };
+        const lineRecords = [];
+
+        for (let index = 0; index < plans.length; index += 1) {
+          const plan = plans[index];
+          setStatus(`正在 OCR：${index + 1}/${plans.length} · ${plan.label}`, "working");
+
+          const canvas = renderCanvas(image, plan);
+          const attempts = await recognizeWithProfiles(Tesseract, canvas, plan, LINE_OCR_PROFILES);
+
+          for (const attempt of attempts) {
+            const match = extractBestCandidate(attempt.rawText);
+            if (attempt.rawText && !bestAttempt.rawText) {
+              bestAttempt.rawText = attempt.rawText;
+              bestAttempt.label = plan.label;
+            }
+
+            if (!match.candidate) {
+              continue;
+            }
+
+            const scoredAttempt = {
+              candidate: match.candidate,
+              score: scoreAttempt(match.candidate, attempt.confidence, "line"),
+              confidence: attempt.confidence,
+              rawText: attempt.rawText || bestAttempt.rawText,
+              label: `${plan.label} · ${attempt.language}`
+            };
+            lineRecords.push(scoredAttempt);
+
+            if (scoredAttempt.score > bestAttempt.score) {
+              bestAttempt = scoredAttempt;
+            }
+          }
+        }
+
+        const votedAttempt = voteBestChineseCandidate(lineRecords);
+        if (votedAttempt && votedAttempt.score > bestAttempt.score) {
+          bestAttempt = votedAttempt;
+        }
+
+        return bestAttempt;
+      }
+
+      async function copyText(value) {
+        if (!value) {
+          return false;
+        }
+
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === "function" && window.isSecureContext) {
+            await navigator.clipboard.writeText(value);
+            return true;
+          }
+        } catch (error) {
+          // Ignore clipboard API failure and try the legacy fallback below.
+        }
+
+        const textarea = document.createElement("textarea");
+        textarea.value = value;
+        textarea.setAttribute("readonly", "readonly");
+        textarea.style.position = "fixed";
+        textarea.style.top = "-1000px";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch (error) {
+          copied = false;
+        }
+
+        textarea.remove();
+        return copied;
+      }
+
+      async function finalizeRecognition(attempt) {
+        state.rawText = attempt.rawText || "";
+        rawTextEl.textContent = state.rawText || "OCR 未提取出可显示文本。";
+
+        if (!attempt.candidate) {
+          fillButton.disabled = true;
+          copyButton.disabled = true;
+          setStatus("图片已展示，但暂时没抽到明显的邀请码。可查看 OCR 原文并手动复制。", "warning");
+          return;
+        }
+
+        state.recognizedCode = attempt.candidate;
+        inviteCodeInput.value = attempt.candidate;
+        copyButton.disabled = false;
+        fillButton.disabled = false;
+
+        const copied = await copyText(attempt.candidate);
+        let tone = copied ? "success" : "warning";
+        let message = copied
+          ? `识别完成，邀请码已复制到剪贴板。来源：${attempt.label}`
+          : "识别完成，但浏览器拒绝写入剪贴板。请点击“复制邀请码”。";
+
+        if (autoFillCheckbox.checked && isMacOS()) {
+          try {
+            await fillWukongApp(attempt.candidate, true);
+            tone = "success";
+            message = `识别完成，已填入悟空 App 并尝试点击“立即体验”。来源：${attempt.label}`;
+          } catch (error) {
+            const reason = error instanceof Error ? error.message : "自动填入失败。";
+            tone = "warning";
+            message = `${message}；自动填入悟空 App 失败：${reason}`;
+          }
+        }
+
+        setStatus(message, tone);
+      }
+
+      async function handleRecognizeCurrentImage() {
+        if (state.busy || !state.imageUrl) {
+          return;
+        }
+
+        state.recognizedCode = "";
+        inviteCodeInput.value = "";
+        copyButton.disabled = true;
+        setBusy(true);
+        setStatus("开始识别当前图片...", "working");
+
+        try {
+          const imageUrl = state.imageUrl;
+
+          let nativeAttempt = null;
+          if (isMacOS()) {
+            setStatus("图片已确认，优先尝试 macOS 系统 OCR...", "working");
+            try {
+              nativeAttempt = await runMacSystemOcr(imageUrl);
+            } catch (error) {
+              const message = error instanceof Error ? error.message : "macOS 系统 OCR 调用失败。";
+              setStatus(`${message}，回退浏览器 OCR。`, "warning");
+            }
+          }
+
+          if (nativeAttempt && nativeAttempt.candidate) {
+            await finalizeRecognition(nativeAttempt);
+            return;
+          }
+
+          setStatus(
+            nativeAttempt && nativeAttempt.rawText
+              ? "系统 OCR 未稳定提取出邀请码，开始浏览器 OCR 复核..."
+              : "开始浏览器 OCR...",
+            "working"
+          );
+          if (nativeAttempt && nativeAttempt.rawText) {
+            state.rawText = nativeAttempt.rawText;
+            rawTextEl.textContent = nativeAttempt.rawText;
+          }
+
+          const attempt = await runOcr(imageUrl);
+          if (nativeAttempt && nativeAttempt.rawText) {
+            attempt.rawText = [
+              `[macOS Vision OCR]`,
+              nativeAttempt.rawText,
+              "",
+              `[Browser Tesseract OCR]`,
+              attempt.rawText || ""
+            ].join("\n");
+          }
+          await finalizeRecognition(attempt);
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "执行失败。";
+          setStatus(message, "error");
+          rawTextEl.textContent = state.rawText || "流程被中断，未拿到 OCR 结果。";
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function handleRun() {
+        if (state.busy) {
+          return;
+        }
+
+        resetOutput();
+        setBusy(true);
+        setStatus("正在执行远端脚本并等待图片地址...", "working");
+
+        try {
+          const imageUrl = await fetchInviteImageUrl();
+          state.imageUrl = imageUrl;
+          renderImage(imageUrl);
+          recognizeButton.disabled = false;
+          setStatus("图片已加载。请确认这是最新邀请码图片后，再点击“手动识别当前图片”。", "success");
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "执行失败。";
+          setStatus(message, "error");
+          rawTextEl.textContent = state.rawText || "流程被中断，未拿到 OCR 结果。";
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function handleCopy() {
+        if (!state.recognizedCode) {
+          return;
+        }
+
+        const copied = await copyText(state.recognizedCode);
+        if (copied) {
+          setStatus("邀请码已再次复制到剪贴板。", "success");
+        } else {
+          setStatus("浏览器仍然拒绝写入剪贴板，请手动复制输入框内容。", "warning");
+        }
+      }
+
+      async function handleFillApp() {
+        if (state.busy || !state.recognizedCode) {
+          return;
+        }
+
+        setBusy(true);
+        setStatus("正在尝试填入悟空 App 并提交...", "working");
+        try {
+          await fillWukongApp(state.recognizedCode, true);
+          setStatus("已将邀请码填入悟空 App，并尝试点击“立即体验”。", "success");
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "填入悟空 App 失败。";
+          setStatus(message, "error");
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      runButton.addEventListener("click", handleRun);
+      recognizeButton.addEventListener("click", handleRecognizeCurrentImage);
+      fillButton.addEventListener("click", handleFillApp);
+      copyButton.addEventListener("click", handleCopy);
+    })();
+  </script>
+</body>
+</html>

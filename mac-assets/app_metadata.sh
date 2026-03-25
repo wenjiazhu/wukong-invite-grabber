@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+APP_NAME="Wukong Invite Grabber.app"
+STOP_APP_NAME="Stop Wukong Invite Grabber.app"
+APP_DISPLAY_NAME="Wukong Invite Grabber"
+STOP_APP_DISPLAY_NAME="Stop Wukong Invite Grabber"
+APP_EXECUTABLE_NAME="WukongInviteGrabber"
+APP_SLUG="wukong-invite-grabber"
+APP_VERSION="1.0.0"
+APP_BUILD="20260324.1"
+APP_BUNDLE_ID="com.thirdmarket.wukonginvitegrabber"
+APP_LAUNCHER_BUNDLE_ID="${APP_BUNDLE_ID}.launcher"
+STOP_APP_BUNDLE_ID="${APP_BUNDLE_ID}.stop"
+MIN_SYSTEM_VERSION="13.0"
+APP_CATEGORY="public.app-category.productivity"
+APPLE_EVENTS_USAGE="Wukong Invite Grabber needs automation access to fill invite codes into the Wukong app."
+COPYRIGHT_NOTICE="Copyright (c) 2026 Wukong Invite Grabber"
+DMG_VOLUME_NAME="Wukong Invite Grabber"
