@@ -9,33 +9,63 @@ enum IconVariant: String {
 struct Palette {
     let backgroundTop: NSColor
     let backgroundBottom: NSColor
-    let rim: NSColor
-    let accent: NSColor
-    let accentSoft: NSColor
-    let ticket: NSColor
-    let ticketShadow: NSColor
-    let badge: NSColor
+    let ambientGlow: NSColor
+    let moonFill: NSColor
+    let moonRim: NSColor
+    let bodyDark: NSColor
+    let bodyLight: NSColor
+    let horn: NSColor
+    let crown: NSColor
+    let crownDark: NSColor
+    let gem: NSColor
+    let nose: NSColor
+    let scarf: NSColor
+    let staff: NSColor
+    let staffGold: NSColor
+    let eyeBrown: NSColor
+    let lightning: NSColor
+    let stopBadge: NSColor
 
     static let main = Palette(
-        backgroundTop: NSColor(calibratedRed: 0.07, green: 0.11, blue: 0.23, alpha: 1.0),
-        backgroundBottom: NSColor(calibratedRed: 0.13, green: 0.20, blue: 0.35, alpha: 1.0),
-        rim: NSColor(calibratedRed: 0.51, green: 0.83, blue: 0.79, alpha: 0.22),
-        accent: NSColor(calibratedRed: 0.95, green: 0.70, blue: 0.23, alpha: 1.0),
-        accentSoft: NSColor(calibratedRed: 0.98, green: 0.87, blue: 0.59, alpha: 1.0),
-        ticket: NSColor(calibratedRed: 0.99, green: 0.97, blue: 0.92, alpha: 1.0),
-        ticketShadow: NSColor(calibratedRed: 0.02, green: 0.04, blue: 0.10, alpha: 0.18),
-        badge: NSColor(calibratedRed: 0.12, green: 0.69, blue: 0.64, alpha: 1.0)
+        backgroundTop: NSColor(calibratedRed: 0.08, green: 0.10, blue: 0.20, alpha: 1.0),
+        backgroundBottom: NSColor(calibratedRed: 0.15, green: 0.30, blue: 0.36, alpha: 1.0),
+        ambientGlow: NSColor(calibratedRed: 0.97, green: 0.48, blue: 0.17, alpha: 0.18),
+        moonFill: NSColor(calibratedRed: 0.99, green: 0.95, blue: 0.84, alpha: 1.0),
+        moonRim: NSColor(calibratedRed: 0.98, green: 0.88, blue: 0.58, alpha: 0.58),
+        bodyDark: NSColor(calibratedRed: 0.07, green: 0.07, blue: 0.09, alpha: 1.0),
+        bodyLight: NSColor(calibratedRed: 0.24, green: 0.24, blue: 0.27, alpha: 1.0),
+        horn: NSColor(calibratedRed: 0.94, green: 0.17, blue: 0.12, alpha: 1.0),
+        crown: NSColor(calibratedRed: 0.98, green: 0.80, blue: 0.23, alpha: 1.0),
+        crownDark: NSColor(calibratedRed: 0.78, green: 0.53, blue: 0.10, alpha: 1.0),
+        gem: NSColor(calibratedRed: 0.90, green: 0.13, blue: 0.10, alpha: 1.0),
+        nose: NSColor(calibratedRed: 0.16, green: 0.67, blue: 0.96, alpha: 1.0),
+        scarf: NSColor(calibratedRed: 0.87, green: 0.11, blue: 0.11, alpha: 1.0),
+        staff: NSColor(calibratedRed: 0.84, green: 0.12, blue: 0.10, alpha: 1.0),
+        staffGold: NSColor(calibratedRed: 0.95, green: 0.73, blue: 0.17, alpha: 1.0),
+        eyeBrown: NSColor(calibratedRed: 0.39, green: 0.22, blue: 0.10, alpha: 1.0),
+        lightning: NSColor(calibratedRed: 0.98, green: 0.98, blue: 1.0, alpha: 1.0),
+        stopBadge: NSColor(calibratedRed: 0.88, green: 0.21, blue: 0.18, alpha: 1.0)
     )
 
     static let stop = Palette(
-        backgroundTop: NSColor(calibratedRed: 0.12, green: 0.11, blue: 0.18, alpha: 1.0),
-        backgroundBottom: NSColor(calibratedRed: 0.21, green: 0.16, blue: 0.24, alpha: 1.0),
-        rim: NSColor(calibratedRed: 0.93, green: 0.41, blue: 0.35, alpha: 0.25),
-        accent: NSColor(calibratedRed: 0.95, green: 0.70, blue: 0.23, alpha: 1.0),
-        accentSoft: NSColor(calibratedRed: 0.98, green: 0.87, blue: 0.59, alpha: 1.0),
-        ticket: NSColor(calibratedRed: 0.99, green: 0.97, blue: 0.92, alpha: 1.0),
-        ticketShadow: NSColor(calibratedRed: 0.03, green: 0.03, blue: 0.06, alpha: 0.20),
-        badge: NSColor(calibratedRed: 0.90, green: 0.28, blue: 0.24, alpha: 1.0)
+        backgroundTop: NSColor(calibratedRed: 0.12, green: 0.09, blue: 0.14, alpha: 1.0),
+        backgroundBottom: NSColor(calibratedRed: 0.22, green: 0.13, blue: 0.16, alpha: 1.0),
+        ambientGlow: NSColor(calibratedRed: 0.95, green: 0.25, blue: 0.20, alpha: 0.18),
+        moonFill: NSColor(calibratedRed: 0.98, green: 0.94, blue: 0.85, alpha: 1.0),
+        moonRim: NSColor(calibratedRed: 0.98, green: 0.78, blue: 0.37, alpha: 0.52),
+        bodyDark: NSColor(calibratedRed: 0.07, green: 0.07, blue: 0.09, alpha: 1.0),
+        bodyLight: NSColor(calibratedRed: 0.24, green: 0.24, blue: 0.27, alpha: 1.0),
+        horn: NSColor(calibratedRed: 0.94, green: 0.17, blue: 0.12, alpha: 1.0),
+        crown: NSColor(calibratedRed: 0.98, green: 0.80, blue: 0.23, alpha: 1.0),
+        crownDark: NSColor(calibratedRed: 0.78, green: 0.53, blue: 0.10, alpha: 1.0),
+        gem: NSColor(calibratedRed: 0.90, green: 0.13, blue: 0.10, alpha: 1.0),
+        nose: NSColor(calibratedRed: 0.16, green: 0.67, blue: 0.96, alpha: 1.0),
+        scarf: NSColor(calibratedRed: 0.87, green: 0.11, blue: 0.11, alpha: 1.0),
+        staff: NSColor(calibratedRed: 0.84, green: 0.12, blue: 0.10, alpha: 1.0),
+        staffGold: NSColor(calibratedRed: 0.95, green: 0.73, blue: 0.17, alpha: 1.0),
+        eyeBrown: NSColor(calibratedRed: 0.39, green: 0.22, blue: 0.10, alpha: 1.0),
+        lightning: NSColor(calibratedRed: 0.98, green: 0.98, blue: 1.0, alpha: 1.0),
+        stopBadge: NSColor(calibratedRed: 0.90, green: 0.22, blue: 0.20, alpha: 1.0)
     )
 }
 
@@ -99,184 +129,419 @@ struct IconRenderer {
     static func drawIcon(in rect: NSRect, variant: IconVariant) {
         let palette = variant == .main ? Palette.main : Palette.stop
 
-        let cornerRadius = rect.width * 0.22
-        let basePath = NSBezierPath(roundedRect: rect, xRadius: cornerRadius, yRadius: cornerRadius)
-        let baseGradient = NSGradient(starting: palette.backgroundTop, ending: palette.backgroundBottom)
-        baseGradient?.draw(in: basePath, angle: 90)
-
-        drawBackdrop(in: rect, palette: palette)
-        drawTicket(in: rect, palette: palette)
-        drawScanner(in: rect, palette: palette)
-        drawCodeBars(in: rect, palette: palette)
-        drawBottomBadge(in: rect, palette: palette)
+        drawBase(in: rect, palette: palette)
+        drawMoon(in: rect, palette: palette)
+        drawAmbientGlow(in: rect, palette: palette)
+        drawStaff(in: rect, palette: palette)
+        drawCape(in: rect, palette: palette)
+        drawBody(in: rect, palette: palette)
+        drawHead(in: rect, palette: palette)
+        drawHorns(in: rect, palette: palette)
+        drawCrown(in: rect, palette: palette)
+        drawEyes(in: rect, palette: palette)
+        drawNoseAndSmile(in: rect, palette: palette)
+        drawScarf(in: rect, palette: palette)
+        drawLightning(in: rect, palette: palette)
 
         if variant == .stop {
             drawStopBadge(in: rect, palette: palette)
         }
     }
 
-    static func drawBackdrop(in rect: NSRect, palette: Palette) {
-        let haloRect = rect.insetBy(dx: rect.width * 0.08, dy: rect.height * 0.08)
-        let haloPath = NSBezierPath(ovalIn: haloRect)
-        palette.rim.setFill()
-        haloPath.fill()
-
-        let upperGlowRect = NSRect(
-            x: rect.minX + rect.width * 0.12,
-            y: rect.minY + rect.height * 0.62,
-            width: rect.width * 0.42,
-            height: rect.height * 0.20
+    static func drawBase(in rect: NSRect, palette: Palette) {
+        let basePath = NSBezierPath(
+            roundedRect: rect,
+            xRadius: rect.width * 0.22,
+            yRadius: rect.width * 0.22
         )
-        let glowPath = NSBezierPath(ovalIn: upperGlowRect)
-        palette.accent.withAlphaComponent(0.14).setFill()
-        glowPath.fill()
+        let gradient = NSGradient(starting: palette.backgroundTop, ending: palette.backgroundBottom)
+        gradient?.draw(in: basePath, angle: 90)
 
-        let rimRect = rect.insetBy(dx: rect.width * 0.035, dy: rect.height * 0.035)
-        let rimPath = NSBezierPath(roundedRect: rimRect, xRadius: rect.width * 0.19, yRadius: rect.height * 0.19)
-        palette.rim.withAlphaComponent(0.65).setStroke()
+        let rimPath = NSBezierPath(
+            roundedRect: rect.insetBy(dx: rect.width * 0.03, dy: rect.width * 0.03),
+            xRadius: rect.width * 0.19,
+            yRadius: rect.width * 0.19
+        )
+        palette.moonRim.withAlphaComponent(0.35).setStroke()
         rimPath.lineWidth = rect.width * 0.012
         rimPath.stroke()
     }
 
-    static func drawTicket(in rect: NSRect, palette: Palette) {
-        let ticketRect = NSRect(
-            x: rect.minX + rect.width * 0.22,
-            y: rect.minY + rect.height * 0.30,
-            width: rect.width * 0.56,
-            height: rect.height * 0.40
+    static func drawAmbientGlow(in rect: NSRect, palette: Palette) {
+        let glowRect = NSRect(
+            x: rect.minX + rect.width * 0.07,
+            y: rect.minY + rect.height * 0.54,
+            width: rect.width * 0.50,
+            height: rect.height * 0.30
         )
-
-        let shadowRect = ticketRect.offsetBy(dx: 0, dy: -rect.height * 0.018)
-        let shadowPath = NSBezierPath(roundedRect: shadowRect, xRadius: rect.width * 0.08, yRadius: rect.width * 0.08)
-        palette.ticketShadow.setFill()
-        shadowPath.fill()
-
-        let ticketShape = NSBezierPath()
-        ticketShape.windingRule = .evenOdd
-        ticketShape.appendRoundedRect(ticketRect, xRadius: rect.width * 0.085, yRadius: rect.width * 0.085)
-
-        let notchDiameter = rect.width * 0.11
-        let notchY = ticketRect.midY - notchDiameter / 2
-        ticketShape.appendOval(in: NSRect(x: ticketRect.minX - notchDiameter / 2, y: notchY, width: notchDiameter, height: notchDiameter))
-        ticketShape.appendOval(in: NSRect(x: ticketRect.maxX - notchDiameter / 2, y: notchY, width: notchDiameter, height: notchDiameter))
-
-        palette.ticket.setFill()
-        ticketShape.fill()
-
-        let topStrip = NSRect(
-            x: ticketRect.minX + ticketRect.width * 0.08,
-            y: ticketRect.maxY - ticketRect.height * 0.16,
-            width: ticketRect.width * 0.42,
-            height: ticketRect.height * 0.06
-        )
-        let topStripPath = NSBezierPath(roundedRect: topStrip, xRadius: topStrip.height / 2, yRadius: topStrip.height / 2)
-        palette.accent.withAlphaComponent(0.16).setFill()
-        topStripPath.fill()
+        let glowPath = NSBezierPath(ovalIn: glowRect)
+        palette.ambientGlow.setFill()
+        glowPath.fill()
     }
 
-    static func drawScanner(in rect: NSRect, palette: Palette) {
-        let scannerRect = NSRect(
-            x: rect.minX + rect.width * 0.24,
-            y: rect.minY + rect.height * 0.34,
+    static func drawMoon(in rect: NSRect, palette: Palette) {
+        let moonRect = NSRect(
+            x: rect.minX + rect.width * 0.14,
+            y: rect.minY + rect.height * 0.12,
+            width: rect.width * 0.72,
+            height: rect.height * 0.72
+        )
+        let moonPath = NSBezierPath(ovalIn: moonRect)
+        palette.moonFill.setFill()
+        moonPath.fill()
+
+        palette.moonRim.withAlphaComponent(0.55).setStroke()
+        moonPath.lineWidth = rect.width * 0.012
+        moonPath.stroke()
+    }
+
+    static func drawStaff(in rect: NSRect, palette: Palette) {
+        let center = NSPoint(x: rect.midX + rect.width * 0.01, y: rect.midY + rect.height * 0.14)
+        fillRotatedCapsule(
+            center: center,
+            length: rect.width * 0.92,
+            thickness: rect.width * 0.072,
+            angle: -14,
+            color: palette.staff
+        )
+
+        fillRotatedCapsule(
+            center: NSPoint(x: rect.midX + rect.width * 0.33, y: rect.midY + rect.height * 0.21),
+            length: rect.width * 0.26,
+            thickness: rect.width * 0.086,
+            angle: -14,
+            color: palette.staffGold
+        )
+    }
+
+    static func drawCape(in rect: NSRect, palette: Palette) {
+        let cape = NSBezierPath()
+        cape.move(to: NSPoint(x: rect.midX - rect.width * 0.03, y: rect.midY + rect.height * 0.01))
+        cape.curve(
+            to: NSPoint(x: rect.midX + rect.width * 0.32, y: rect.midY - rect.height * 0.00),
+            controlPoint1: NSPoint(x: rect.midX + rect.width * 0.10, y: rect.midY + rect.height * 0.05),
+            controlPoint2: NSPoint(x: rect.midX + rect.width * 0.27, y: rect.midY + rect.height * 0.10)
+        )
+        cape.curve(
+            to: NSPoint(x: rect.midX + rect.width * 0.10, y: rect.midY - rect.height * 0.15),
+            controlPoint1: NSPoint(x: rect.midX + rect.width * 0.32, y: rect.midY - rect.height * 0.12),
+            controlPoint2: NSPoint(x: rect.midX + rect.width * 0.18, y: rect.midY - rect.height * 0.18)
+        )
+        cape.close()
+        palette.scarf.withAlphaComponent(0.82).setFill()
+        cape.fill()
+    }
+
+    static func drawBody(in rect: NSRect, palette: Palette) {
+        let bodyRect = NSRect(
+            x: rect.midX - rect.width * 0.15,
+            y: rect.minY + rect.height * 0.10,
+            width: rect.width * 0.31,
+            height: rect.height * 0.30
+        )
+        let bodyPath = NSBezierPath(ovalIn: bodyRect)
+        let bodyGradient = NSGradient(starting: palette.bodyLight, ending: palette.bodyDark)
+        bodyGradient?.draw(in: bodyPath, angle: 120)
+
+        palette.bodyLight.withAlphaComponent(0.38).setStroke()
+        bodyPath.lineWidth = rect.width * 0.010
+        bodyPath.stroke()
+
+        let leftArm = NSBezierPath()
+        leftArm.move(to: NSPoint(x: rect.midX - rect.width * 0.10, y: rect.minY + rect.height * 0.25))
+        leftArm.curve(
+            to: NSPoint(x: rect.midX - rect.width * 0.30, y: rect.minY + rect.height * 0.24),
+            controlPoint1: NSPoint(x: rect.midX - rect.width * 0.19, y: rect.minY + rect.height * 0.28),
+            controlPoint2: NSPoint(x: rect.midX - rect.width * 0.28, y: rect.minY + rect.height * 0.30)
+        )
+        leftArm.curve(
+            to: NSPoint(x: rect.midX - rect.width * 0.25, y: rect.minY + rect.height * 0.14),
+            controlPoint1: NSPoint(x: rect.midX - rect.width * 0.31, y: rect.minY + rect.height * 0.18),
+            controlPoint2: NSPoint(x: rect.midX - rect.width * 0.29, y: rect.minY + rect.height * 0.11)
+        )
+        leftArm.curve(
+            to: NSPoint(x: rect.midX - rect.width * 0.08, y: rect.minY + rect.height * 0.18),
+            controlPoint1: NSPoint(x: rect.midX - rect.width * 0.20, y: rect.minY + rect.height * 0.15),
+            controlPoint2: NSPoint(x: rect.midX - rect.width * 0.11, y: rect.minY + rect.height * 0.17)
+        )
+        leftArm.close()
+        palette.bodyDark.setFill()
+        leftArm.fill()
+    }
+
+    static func drawHead(in rect: NSRect, palette: Palette) {
+        let headRect = NSRect(
+            x: rect.midX - rect.width * 0.26,
+            y: rect.minY + rect.height * 0.24,
             width: rect.width * 0.52,
-            height: rect.height * 0.34
+            height: rect.height * 0.48
         )
-        let length = rect.width * 0.075
-        let lineWidth = rect.width * 0.018
-        let bracketColor = palette.accentSoft
-        bracketColor.setStroke()
 
-        func strokeBracket(from start: NSPoint, horizontal: CGFloat, vertical: CGFloat) {
+        let shadow = NSShadow()
+        shadow.shadowBlurRadius = rect.width * 0.035
+        shadow.shadowOffset = NSSize(width: 0, height: -rect.height * 0.01)
+        shadow.shadowColor = NSColor.black.withAlphaComponent(0.35)
+        NSGraphicsContext.saveGraphicsState()
+        shadow.set()
+
+        let headPath = NSBezierPath(ovalIn: headRect)
+        let gradient = NSGradient(colors: [
+            palette.bodyLight,
+            palette.bodyDark,
+            palette.bodyDark
+        ])
+        gradient?.draw(in: headPath, angle: 120)
+        NSGraphicsContext.restoreGraphicsState()
+
+        palette.bodyLight.withAlphaComponent(0.42).setStroke()
+        headPath.lineWidth = rect.width * 0.010
+        headPath.stroke()
+
+        let faceGlowRect = NSRect(
+            x: headRect.minX + headRect.width * 0.12,
+            y: headRect.midY + headRect.height * 0.02,
+            width: headRect.width * 0.32,
+            height: headRect.height * 0.20
+        )
+        let faceGlow = NSBezierPath(ovalIn: faceGlowRect)
+        palette.moonFill.withAlphaComponent(0.08).setFill()
+        faceGlow.fill()
+    }
+
+    static func drawHorns(in rect: NSRect, palette: Palette) {
+        func hornPath(side: CGFloat) -> NSBezierPath {
             let path = NSBezierPath()
-            path.lineWidth = lineWidth
-            path.lineCapStyle = .round
-            path.move(to: start)
-            path.line(to: NSPoint(x: start.x + horizontal, y: start.y))
-            path.move(to: start)
-            path.line(to: NSPoint(x: start.x, y: start.y + vertical))
-            path.stroke()
+            let startX = rect.midX + side * rect.width * 0.12
+            let startY = rect.minY + rect.height * 0.67
+            path.move(to: NSPoint(x: startX, y: startY))
+            path.curve(
+                to: NSPoint(x: startX + side * rect.width * 0.045, y: rect.minY + rect.height * 0.95),
+                controlPoint1: NSPoint(x: startX + side * rect.width * 0.00, y: rect.minY + rect.height * 0.81),
+                controlPoint2: NSPoint(x: startX + side * rect.width * 0.07, y: rect.minY + rect.height * 0.87)
+            )
+            path.curve(
+                to: NSPoint(x: startX - side * rect.width * 0.028, y: rect.minY + rect.height * 0.72),
+                controlPoint1: NSPoint(x: startX + side * rect.width * 0.012, y: rect.minY + rect.height * 0.90),
+                controlPoint2: NSPoint(x: startX - side * rect.width * 0.05, y: rect.minY + rect.height * 0.80)
+            )
+            path.close()
+            return path
         }
 
-        strokeBracket(from: NSPoint(x: scannerRect.minX, y: scannerRect.maxY), horizontal: length, vertical: -length)
-        strokeBracket(from: NSPoint(x: scannerRect.maxX, y: scannerRect.maxY), horizontal: -length, vertical: -length)
-        strokeBracket(from: NSPoint(x: scannerRect.minX, y: scannerRect.minY), horizontal: length, vertical: length)
-        strokeBracket(from: NSPoint(x: scannerRect.maxX, y: scannerRect.minY), horizontal: -length, vertical: length)
-
-        let scanLineRect = NSRect(
-            x: scannerRect.minX + rect.width * 0.05,
-            y: scannerRect.midY - rect.height * 0.009,
-            width: scannerRect.width - rect.width * 0.10,
-            height: rect.height * 0.018
-        )
-        let scanLinePath = NSBezierPath(roundedRect: scanLineRect, xRadius: scanLineRect.height / 2, yRadius: scanLineRect.height / 2)
-        palette.badge.withAlphaComponent(0.92).setFill()
-        scanLinePath.fill()
+        palette.horn.setFill()
+        hornPath(side: -1).fill()
+        hornPath(side: 1).fill()
     }
 
-    static func drawCodeBars(in rect: NSRect, palette: Palette) {
-        let groupRect = NSRect(
-            x: rect.minX + rect.width * 0.32,
-            y: rect.minY + rect.height * 0.43,
-            width: rect.width * 0.36,
-            height: rect.height * 0.08
+    static func drawCrown(in rect: NSRect, palette: Palette) {
+        let crown = NSBezierPath()
+        crown.move(to: NSPoint(x: rect.midX - rect.width * 0.14, y: rect.minY + rect.height * 0.68))
+        crown.line(to: NSPoint(x: rect.midX - rect.width * 0.08, y: rect.minY + rect.height * 0.78))
+        crown.line(to: NSPoint(x: rect.midX, y: rect.minY + rect.height * 0.72))
+        crown.line(to: NSPoint(x: rect.midX + rect.width * 0.08, y: rect.minY + rect.height * 0.78))
+        crown.line(to: NSPoint(x: rect.midX + rect.width * 0.14, y: rect.minY + rect.height * 0.68))
+        crown.curve(
+            to: NSPoint(x: rect.midX - rect.width * 0.14, y: rect.minY + rect.height * 0.68),
+            controlPoint1: NSPoint(x: rect.midX + rect.width * 0.11, y: rect.minY + rect.height * 0.61),
+            controlPoint2: NSPoint(x: rect.midX - rect.width * 0.11, y: rect.minY + rect.height * 0.61)
         )
+        palette.crown.setFill()
+        crown.fill()
 
-        let barCount = 5
-        let gap = groupRect.width * 0.04
-        let barWidth = (groupRect.width - gap * CGFloat(barCount - 1)) / CGFloat(barCount)
-        let heights: [CGFloat] = [0.62, 0.92, 0.74, 0.88, 0.56]
+        palette.crownDark.setStroke()
+        crown.lineWidth = rect.width * 0.008
+        crown.stroke()
 
-        for index in 0..<barCount {
-            let barHeight = groupRect.height * heights[index]
-            let x = groupRect.minX + CGFloat(index) * (barWidth + gap)
-            let y = groupRect.midY - barHeight / 2
-            let barRect = NSRect(x: x, y: y, width: barWidth, height: barHeight)
-            let barPath = NSBezierPath(roundedRect: barRect, xRadius: barWidth / 2, yRadius: barWidth / 2)
-            palette.accent.setFill()
-            barPath.fill()
-        }
+        let gemRect = NSRect(
+            x: rect.midX - rect.width * 0.040,
+            y: rect.minY + rect.height * 0.666,
+            width: rect.width * 0.080,
+            height: rect.width * 0.080
+        )
+        let gemPath = NSBezierPath(ovalIn: gemRect)
+        palette.gem.setFill()
+        gemPath.fill()
+        palette.moonFill.withAlphaComponent(0.55).setStroke()
+        gemPath.lineWidth = rect.width * 0.006
+        gemPath.stroke()
     }
 
-    static func drawBottomBadge(in rect: NSRect, palette: Palette) {
-        let badgeRect = NSRect(
-            x: rect.minX + rect.width * 0.32,
-            y: rect.minY + rect.height * 0.20,
-            width: rect.width * 0.36,
+    static func drawEyes(in rect: NSRect, palette: Palette) {
+        drawEye(
+            center: NSPoint(x: rect.midX - rect.width * 0.12, y: rect.minY + rect.height * 0.54),
+            size: CGSize(width: rect.width * 0.16, height: rect.height * 0.20),
+            palette: palette,
+            pupilOffset: NSPoint(x: -rect.width * 0.002, y: -rect.height * 0.004)
+        )
+        drawEye(
+            center: NSPoint(x: rect.midX + rect.width * 0.12, y: rect.minY + rect.height * 0.54),
+            size: CGSize(width: rect.width * 0.16, height: rect.height * 0.20),
+            palette: palette,
+            pupilOffset: NSPoint(x: rect.width * 0.002, y: -rect.height * 0.004)
+        )
+    }
+
+    static func drawEye(center: NSPoint, size: CGSize, palette: Palette, pupilOffset: NSPoint) {
+        let eyeRect = NSRect(
+            x: center.x - size.width / 2,
+            y: center.y - size.height / 2,
+            width: size.width,
+            height: size.height
+        )
+        let eyePath = NSBezierPath(ovalIn: eyeRect)
+        NSColor.white.setFill()
+        eyePath.fill()
+        palette.bodyDark.withAlphaComponent(0.55).setStroke()
+        eyePath.lineWidth = size.width * 0.06
+        eyePath.stroke()
+
+        let irisRect = NSRect(
+            x: center.x - size.width * 0.30 + pupilOffset.x,
+            y: center.y - size.height * 0.21 + pupilOffset.y,
+            width: size.width * 0.60,
+            height: size.width * 0.60
+        )
+        let irisPath = NSBezierPath(ovalIn: irisRect)
+        let irisGradient = NSGradient(colors: [
+            NSColor(calibratedRed: 0.92, green: 0.77, blue: 0.35, alpha: 1.0),
+            palette.eyeBrown,
+        ])
+        irisGradient?.draw(in: irisPath, angle: 90)
+
+        let pupilRect = irisRect.insetBy(dx: irisRect.width * 0.18, dy: irisRect.height * 0.18)
+        NSColor.black.setFill()
+        NSBezierPath(ovalIn: pupilRect).fill()
+
+        let highlightRect = NSRect(
+            x: irisRect.minX + irisRect.width * 0.16,
+            y: irisRect.maxY - irisRect.height * 0.30,
+            width: irisRect.width * 0.18,
+            height: irisRect.height * 0.18
+        )
+        NSColor.white.withAlphaComponent(0.95).setFill()
+        NSBezierPath(ovalIn: highlightRect).fill()
+    }
+
+    static func drawNoseAndSmile(in rect: NSRect, palette: Palette) {
+        let noseRect = NSRect(
+            x: rect.midX - rect.width * 0.034,
+            y: rect.minY + rect.height * 0.423,
+            width: rect.width * 0.068,
+            height: rect.width * 0.050
+        )
+        let nose = NSBezierPath(roundedRect: noseRect, xRadius: noseRect.height * 0.45, yRadius: noseRect.height * 0.45)
+        palette.nose.setFill()
+        nose.fill()
+
+        palette.moonFill.withAlphaComponent(0.35).setStroke()
+        nose.lineWidth = rect.width * 0.004
+        nose.stroke()
+
+        let smile = NSBezierPath()
+        smile.move(to: NSPoint(x: rect.midX - rect.width * 0.038, y: rect.minY + rect.height * 0.405))
+        smile.curve(
+            to: NSPoint(x: rect.midX + rect.width * 0.038, y: rect.minY + rect.height * 0.405),
+            controlPoint1: NSPoint(x: rect.midX - rect.width * 0.020, y: rect.minY + rect.height * 0.388),
+            controlPoint2: NSPoint(x: rect.midX + rect.width * 0.020, y: rect.minY + rect.height * 0.388)
+        )
+        palette.bodyLight.withAlphaComponent(0.78).setStroke()
+        smile.lineWidth = rect.width * 0.007
+        smile.stroke()
+    }
+
+    static func drawScarf(in rect: NSRect, palette: Palette) {
+        let scarfRect = NSRect(
+            x: rect.midX - rect.width * 0.20,
+            y: rect.minY + rect.height * 0.26,
+            width: rect.width * 0.40,
             height: rect.height * 0.10
         )
-        let badgePath = NSBezierPath(roundedRect: badgeRect, xRadius: badgeRect.height / 2, yRadius: badgeRect.height / 2)
-        palette.badge.setFill()
-        badgePath.fill()
+        let scarf = NSBezierPath(roundedRect: scarfRect, xRadius: scarfRect.height * 0.48, yRadius: scarfRect.height * 0.48)
+        palette.scarf.setFill()
+        scarf.fill()
 
-        let dotSize = rect.width * 0.04
-        let dotY = badgeRect.midY - dotSize / 2
-        let dotXs = [0.16, 0.50, 0.84].map { badgeRect.minX + badgeRect.width * CGFloat($0) - dotSize / 2 }
-        palette.ticket.setFill()
-        for x in dotXs {
-            NSBezierPath(ovalIn: NSRect(x: x, y: dotY, width: dotSize, height: dotSize)).fill()
-        }
+        let knotRect = NSRect(
+            x: rect.midX - rect.width * 0.032,
+            y: rect.minY + rect.height * 0.225,
+            width: rect.width * 0.074,
+            height: rect.height * 0.074
+        )
+        let knot = NSBezierPath(ovalIn: knotRect)
+        palette.scarf.setFill()
+        knot.fill()
+
+        let tail = NSBezierPath()
+        tail.move(to: NSPoint(x: rect.midX + rect.width * 0.01, y: rect.minY + rect.height * 0.29))
+        tail.curve(
+            to: NSPoint(x: rect.midX + rect.width * 0.28, y: rect.minY + rect.height * 0.17),
+            controlPoint1: NSPoint(x: rect.midX + rect.width * 0.14, y: rect.minY + rect.height * 0.31),
+            controlPoint2: NSPoint(x: rect.midX + rect.width * 0.29, y: rect.minY + rect.height * 0.25)
+        )
+        tail.curve(
+            to: NSPoint(x: rect.midX + rect.width * 0.08, y: rect.minY + rect.height * 0.10),
+            controlPoint1: NSPoint(x: rect.midX + rect.width * 0.22, y: rect.minY + rect.height * 0.12),
+            controlPoint2: NSPoint(x: rect.midX + rect.width * 0.14, y: rect.minY + rect.height * 0.08)
+        )
+        tail.curve(
+            to: NSPoint(x: rect.midX - rect.width * 0.01, y: rect.minY + rect.height * 0.22),
+            controlPoint1: NSPoint(x: rect.midX + rect.width * 0.07, y: rect.minY + rect.height * 0.14),
+            controlPoint2: NSPoint(x: rect.midX - rect.width * 0.02, y: rect.minY + rect.height * 0.18)
+        )
+        tail.close()
+        palette.scarf.withAlphaComponent(0.95).setFill()
+        tail.fill()
+    }
+
+    static func drawLightning(in rect: NSRect, palette: Palette) {
+        let bolt = NSBezierPath()
+        bolt.move(to: NSPoint(x: rect.midX - rect.width * 0.020, y: rect.minY + rect.height * 0.25))
+        bolt.line(to: NSPoint(x: rect.midX + rect.width * 0.036, y: rect.minY + rect.height * 0.25))
+        bolt.line(to: NSPoint(x: rect.midX + rect.width * 0.004, y: rect.minY + rect.height * 0.18))
+        bolt.line(to: NSPoint(x: rect.midX + rect.width * 0.060, y: rect.minY + rect.height * 0.18))
+        bolt.line(to: NSPoint(x: rect.midX - rect.width * 0.032, y: rect.minY + rect.height * 0.08))
+        bolt.line(to: NSPoint(x: rect.midX - rect.width * 0.006, y: rect.minY + rect.height * 0.145))
+        bolt.line(to: NSPoint(x: rect.midX - rect.width * 0.055, y: rect.minY + rect.height * 0.145))
+        bolt.close()
+        palette.lightning.setFill()
+        bolt.fill()
     }
 
     static func drawStopBadge(in rect: NSRect, palette: Palette) {
-        let badgeDiameter = rect.width * 0.25
         let badgeRect = NSRect(
-            x: rect.maxX - badgeDiameter - rect.width * 0.12,
-            y: rect.minY + rect.height * 0.10,
-            width: badgeDiameter,
-            height: badgeDiameter
+            x: rect.maxX - rect.width * 0.30,
+            y: rect.minY + rect.height * 0.07,
+            width: rect.width * 0.22,
+            height: rect.width * 0.22
         )
-        let badgePath = NSBezierPath(ovalIn: badgeRect)
-        palette.badge.setFill()
-        badgePath.fill()
+        let badge = NSBezierPath(ovalIn: badgeRect)
+        palette.stopBadge.setFill()
+        badge.fill()
 
         let minusRect = NSRect(
-            x: badgeRect.minX + badgeRect.width * 0.22,
-            y: badgeRect.midY - badgeRect.height * 0.06,
-            width: badgeRect.width * 0.56,
-            height: badgeRect.height * 0.12
+            x: badgeRect.minX + badgeRect.width * 0.20,
+            y: badgeRect.midY - badgeRect.height * 0.065,
+            width: badgeRect.width * 0.60,
+            height: badgeRect.height * 0.13
         )
-        let minusPath = NSBezierPath(roundedRect: minusRect, xRadius: minusRect.height / 2, yRadius: minusRect.height / 2)
+        let minus = NSBezierPath(roundedRect: minusRect, xRadius: minusRect.height / 2, yRadius: minusRect.height / 2)
         NSColor.white.setFill()
-        minusPath.fill()
+        minus.fill()
+    }
+
+    static func fillRotatedCapsule(center: NSPoint, length: CGFloat, thickness: CGFloat, angle: CGFloat, color: NSColor) {
+        let rect = NSRect(
+            x: center.x - length / 2,
+            y: center.y - thickness / 2,
+            width: length,
+            height: thickness
+        )
+        let path = NSBezierPath(roundedRect: rect, xRadius: thickness / 2, yRadius: thickness / 2)
+        var transform = AffineTransform()
+        transform.translate(x: center.x, y: center.y)
+        transform.rotate(byDegrees: angle)
+        transform.translate(x: -center.x, y: -center.y)
+        path.transform(using: transform)
+        color.setFill()
+        path.fill()
     }
 }
