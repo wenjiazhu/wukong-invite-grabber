@@ -10,6 +10,7 @@ import platform
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import urllib.error
 import urllib.parse
@@ -140,6 +141,70 @@ def run_osascript(script: str) -> str:
         message = stderr or stdout or f"osascript exited with code {error.returncode}."
         raise RuntimeError(message) from error
     return result.stdout.strip()
+
+
+def read_process_command(pid: int) -> str:
+    if pid <= 0:
+        return ""
+    try:
+        result = subprocess.run(
+            ["ps", "-o", "command=", "-p", str(pid)],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (PermissionError, subprocess.CalledProcessError):
+        return ""
+    return result.stdout.strip()
+
+
+def extract_app_bundle_path(command: str) -> str:
+    if not command:
+        return ""
+    match = re.search(r"(/.*?\.app)", command)
+    return match.group(1) if match else ""
+
+
+def probe_system_events_access() -> dict[str, object]:
+    script = 'tell application "System Events" to count of application processes'
+    try:
+        detail = run_osascript(script)
+        return {
+            "ok": True,
+            "detail": detail,
+        }
+    except RuntimeError as error:
+        return {
+            "ok": False,
+            "detail": str(error),
+        }
+
+
+def build_bridge_diagnostics() -> dict[str, object]:
+    runner_pid = os.getpid()
+    parent_pid = os.getppid()
+    runner_executable = sys.executable
+    parent_command = read_process_command(parent_pid)
+    parent_app_path = extract_app_bundle_path(parent_command)
+
+    permission_target_path = parent_app_path or runner_executable
+    if parent_app_path:
+        permission_target_label = Path(parent_app_path).stem
+    elif parent_command:
+        permission_target_label = Path(parent_command.split()[0]).name
+    else:
+        permission_target_label = Path(runner_executable).name or "python3"
+
+    return {
+        "runner_type": "python-bridge",
+        "runner_pid": runner_pid,
+        "runner_executable": runner_executable,
+        "parent_pid": parent_pid,
+        "parent_command": parent_command,
+        "permission_target_label": permission_target_label,
+        "permission_target_path": permission_target_path,
+        "system_events_probe": probe_system_events_access(),
+    }
 
 
 def applescript_quote(value: str) -> str:
@@ -294,6 +359,51 @@ def fill_wukong_app(code: str, submit: bool = True) -> dict[str, object]:
         return false
     end clickSubmitButton
 
+    on focusInput(targetInput)
+        if targetInput is missing value then
+            return false
+        end if
+
+        tell application "System Events"
+            try
+                perform action "AXPress" of targetInput
+            end try
+            try
+                set focused of targetInput to true
+            end try
+        end tell
+        delay 0.15
+        return true
+    end focusInput
+
+    on replaceTextByPaste(targetInput, inviteCode)
+        set clipboardBackup to missing value
+        set hasClipboardBackup to false
+
+        my focusInput(targetInput)
+
+        try
+            set clipboardBackup to the clipboard
+            set hasClipboardBackup to true
+        end try
+        set the clipboard to inviteCode
+
+        tell application "System Events"
+            keystroke "a" using command down
+            delay 0.08
+            key code 51
+            delay 0.08
+            keystroke "v" using command down
+        end tell
+        delay 0.18
+
+        if hasClipboardBackup then
+            set the clipboard to clipboardBackup
+        end if
+
+        return "clipboard-paste"
+    end replaceTextByPaste
+
     on fillInviteCode(targetInput, inviteCode)
         tell application "System Events"
             if targetInput is not missing value then
@@ -301,19 +411,33 @@ def fill_wukong_app(code: str, submit: bool = True) -> dict[str, object]:
                     set value of targetInput to inviteCode
                     return "set-value"
                 end try
+            end if
+        end tell
 
+        my focusInput(targetInput)
+
+        tell application "System Events"
+            if targetInput is not missing value then
                 try
-                    perform action "AXPress" of targetInput
-                end try
-                try
-                    set focused of targetInput to true
+                    set value of targetInput to inviteCode
+                    return "focused-set-value"
                 end try
             end if
-
-            keystroke "a" using command down
-            delay 0.1
-            keystroke inviteCode
         end tell
+
+        try
+            return my replaceTextByPaste(targetInput, inviteCode)
+        on error
+            my focusInput(targetInput)
+            tell application "System Events"
+                keystroke "a" using command down
+                delay 0.08
+                key code 51
+                delay 0.08
+                keystroke inviteCode
+            end tell
+            delay 0.18
+        end try
         return "keystroke"
     end fillInviteCode
 
@@ -339,14 +463,7 @@ def fill_wukong_app(code: str, submit: bool = True) -> dict[str, object]:
             set frontmost to true
             set targetWindow to front window
             set targetInput to my findFirstInput(targetWindow)
-            if targetInput is not missing value then
-                try
-                    perform action "AXPress" of targetInput
-                end try
-                try
-                    set focused of targetInput to true
-                end try
-            end if
+            my focusInput(targetInput)
         end tell
 
         set fillMethod to my fillInviteCode(targetInput, inviteCode)
@@ -597,6 +714,7 @@ class OCRBridgeHandler(BaseHTTPRequestHandler):
                 "ok": True,
                 "platform": platform.system(),
                 "mode": "macos-vision",
+                "diagnostics": build_bridge_diagnostics(),
             }
             self.respond_json(200, payload)
             return
@@ -665,10 +783,10 @@ class OCRBridgeHandler(BaseHTTPRequestHandler):
             stderr = (error.stderr or "").strip()
             stdout = (error.stdout or "").strip()
             message = stderr or stdout or str(error) or "fill-app command failed."
-            self.respond_json(500, {"error": message})
+            self.respond_json(500, {"error": message, "diagnostics": build_bridge_diagnostics()})
             return
         except Exception as error:  # noqa: BLE001
-            self.respond_json(500, {"error": str(error)})
+            self.respond_json(500, {"error": str(error), "diagnostics": build_bridge_diagnostics()})
             return
 
         self.respond_json(200, result)

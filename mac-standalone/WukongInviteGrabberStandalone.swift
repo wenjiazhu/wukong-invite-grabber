@@ -1,4 +1,5 @@
 import AppKit
+import ApplicationServices
 import Foundation
 import Vision
 import WebKit
@@ -101,11 +102,7 @@ final class NativeBridgeHandler: NSObject, WKScriptMessageHandler {
     private func handle(action: String, payload: [String: Any]) throws -> [String: Any] {
         switch action {
         case "health":
-            return [
-                "ok": true,
-                "platform": "Darwin",
-                "mode": "macos-native-app",
-            ]
+            return healthPayload()
         case "ocr":
             return try runOCR(payload: payload)
         case "fill-app":
@@ -113,6 +110,15 @@ final class NativeBridgeHandler: NSObject, WKScriptMessageHandler {
         default:
             throw WukongAppError.unsupportedAction(action)
         }
+    }
+
+    private func healthPayload() -> [String: Any] {
+        [
+            "ok": true,
+            "platform": "Darwin",
+            "mode": "macos-native-app",
+            "diagnostics": permissionDiagnostics(),
+        ]
     }
 
     private func runOCR(payload: [String: Any]) throws -> [String: Any] {
@@ -200,6 +206,41 @@ final class NativeBridgeHandler: NSObject, WKScriptMessageHandler {
         throw WukongAppError.appNotRunning
     }
 
+    private func permissionDiagnostics() -> [String: Any] {
+        let bundlePath = Bundle.main.bundleURL.path
+        let bundleIdentifier = Bundle.main.bundleIdentifier ?? ""
+        let permissionTargetLabel =
+            (Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String) ??
+            (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String) ??
+            Bundle.main.bundleURL.deletingPathExtension().lastPathComponent
+
+        return [
+            "runner_type": "native-standalone",
+            "runner_pid": Int(ProcessInfo.processInfo.processIdentifier),
+            "bundle_id": bundleIdentifier,
+            "permission_target_label": permissionTargetLabel,
+            "permission_target_path": bundlePath,
+            "ax_trusted": AXIsProcessTrusted(),
+            "system_events_probe": diagnoseSystemEventsProbe(),
+        ]
+    }
+
+    private func diagnoseSystemEventsProbe() -> [String: Any] {
+        do {
+            let detail = try runAppleScript(#"tell application "System Events" to count of application processes"#)
+            return [
+                "ok": true,
+                "detail": detail,
+            ]
+        } catch {
+            let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+            return [
+                "ok": false,
+                "detail": message,
+            ]
+        }
+    }
+
     private func runFillScript(processID: pid_t, inviteCode: String, submit: Bool) throws -> String {
         let submitFlag = submit ? "true" : "false"
         let script = """
@@ -239,6 +280,51 @@ final class NativeBridgeHandler: NSObject, WKScriptMessageHandler {
             return false
         end clickSubmitButton
 
+        on focusInput(targetInput)
+            if targetInput is missing value then
+                return false
+            end if
+
+            tell application "System Events"
+                try
+                    perform action "AXPress" of targetInput
+                end try
+                try
+                    set focused of targetInput to true
+                end try
+            end tell
+            delay 0.15
+            return true
+        end focusInput
+
+        on replaceTextByPaste(targetInput, inviteCode)
+            set clipboardBackup to missing value
+            set hasClipboardBackup to false
+
+            my focusInput(targetInput)
+
+            try
+                set clipboardBackup to the clipboard
+                set hasClipboardBackup to true
+            end try
+            set the clipboard to inviteCode
+
+            tell application "System Events"
+                keystroke "a" using command down
+                delay 0.08
+                key code 51
+                delay 0.08
+                keystroke "v" using command down
+            end tell
+            delay 0.18
+
+            if hasClipboardBackup then
+                set the clipboard to clipboardBackup
+            end if
+
+            return "clipboard-paste"
+        end replaceTextByPaste
+
         on fillInviteCode(targetInput, inviteCode)
             tell application "System Events"
                 if targetInput is not missing value then
@@ -246,19 +332,33 @@ final class NativeBridgeHandler: NSObject, WKScriptMessageHandler {
                         set value of targetInput to inviteCode
                         return "set-value"
                     end try
+                end if
+            end tell
 
+            my focusInput(targetInput)
+
+            tell application "System Events"
+                if targetInput is not missing value then
                     try
-                        perform action "AXPress" of targetInput
-                    end try
-                    try
-                        set focused of targetInput to true
+                        set value of targetInput to inviteCode
+                        return "focused-set-value"
                     end try
                 end if
-
-                keystroke "a" using command down
-                delay 0.1
-                keystroke inviteCode
             end tell
+
+            try
+                return my replaceTextByPaste(targetInput, inviteCode)
+            on error
+                my focusInput(targetInput)
+                tell application "System Events"
+                    keystroke "a" using command down
+                    delay 0.08
+                    key code 51
+                    delay 0.08
+                    keystroke inviteCode
+                end tell
+                delay 0.18
+            end try
             return "keystroke"
         end fillInviteCode
 
@@ -285,14 +385,7 @@ final class NativeBridgeHandler: NSObject, WKScriptMessageHandler {
                 set frontmost to true
                 set targetWindow to front window
                 set targetInput to my findFirstInput(targetWindow)
-                if targetInput is not missing value then
-                    try
-                        perform action "AXPress" of targetInput
-                    end try
-                    try
-                        set focused of targetInput to true
-                    end try
-                end if
+                my focusInput(targetInput)
             end tell
 
             set fillMethod to my fillInviteCode(targetInput, inviteCode)

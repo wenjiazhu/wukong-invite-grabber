@@ -498,7 +498,8 @@
       };
       const macOcrBridgeState = {
         checked: false,
-        available: false
+        available: false,
+        healthPayload: null
       };
 
       const runButton = document.getElementById("runButton");
@@ -610,9 +611,11 @@
         if (isNativeStandaloneApp()) {
           try {
             const responsePayload = await callNativeAppBridge("health", {}, 3000);
+            macOcrBridgeState.healthPayload = responsePayload || null;
             macOcrBridgeState.available = Boolean(responsePayload && responsePayload.ok);
           } catch (error) {
             macOcrBridgeState.available = false;
+            macOcrBridgeState.healthPayload = null;
           }
 
           macOcrBridgeState.checked = true;
@@ -625,19 +628,60 @@
             mode: "cors",
             cache: "no-store"
           });
-          macOcrBridgeState.available = response.ok;
+          const responsePayload = await response.json().catch(() => null);
+          macOcrBridgeState.healthPayload = responsePayload;
+          macOcrBridgeState.available = Boolean(response.ok && responsePayload && responsePayload.ok !== false);
         } catch (error) {
           macOcrBridgeState.available = false;
+          macOcrBridgeState.healthPayload = null;
         }
 
         macOcrBridgeState.checked = true;
         return macOcrBridgeState.available;
       }
 
-      function normalizeFillAppErrorMessage(message) {
+      function getBridgeDiagnostics() {
+        const healthPayload = macOcrBridgeState.healthPayload;
+        if (!healthPayload || typeof healthPayload !== "object") {
+          return null;
+        }
+        return healthPayload.diagnostics && typeof healthPayload.diagnostics === "object"
+          ? healthPayload.diagnostics
+          : null;
+      }
+
+      function getPermissionTargetLabel(diagnostics) {
+        if (!diagnostics || typeof diagnostics !== "object") {
+          return "当前宿主进程";
+        }
+        if (typeof diagnostics.permission_target_label === "string" && diagnostics.permission_target_label) {
+          return diagnostics.permission_target_label;
+        }
+        if (typeof diagnostics.runner_executable === "string" && diagnostics.runner_executable) {
+          const parts = diagnostics.runner_executable.split("/");
+          return parts[parts.length - 1] || "当前宿主进程";
+        }
+        return "当前宿主进程";
+      }
+
+      function getSystemEventsProbeDetail(diagnostics) {
+        if (!diagnostics || typeof diagnostics !== "object") {
+          return "";
+        }
+        const probe = diagnostics.system_events_probe;
+        if (!probe || typeof probe !== "object") {
+          return "";
+        }
+        return typeof probe.detail === "string" ? probe.detail : "";
+      }
+
+      function normalizeFillAppErrorMessage(message, diagnostics) {
         if (!message) {
           return "填入悟空 App 失败。";
         }
+
+        const permissionTargetLabel = getPermissionTargetLabel(diagnostics);
+        const systemEventsProbeDetail = getSystemEventsProbeDetail(diagnostics);
 
         if (/Wukong app process not found/i.test(message)) {
           return "未检测到悟空 App 进程。请先打开悟空 App，并停留在邀请码输入页。";
@@ -647,12 +691,25 @@
           return "悟空 App 当前没有可操作窗口。请先切到邀请码输入页。";
         }
 
-        if (/not authorized|not permitted|accessibility|System Events got an error|辅助访问|辅助功能|不允许辅助访问|-25211/i.test(message)) {
-          return "macOS 未授予辅助功能权限。请到“系统设置 > 隐私与安全性 > 辅助功能”里放行当前终端或 Python。";
+        if (/not authorized to send Apple events to System Events|Apple events|Automation|-1743/i.test(message)) {
+          return `${permissionTargetLabel} 还没有“自动化”权限，无法控制 System Events。请到“系统设置 > 隐私与安全性 > 自动化”里放行它；如果你刚重建过 app，先删除旧授权再重新勾选，然后彻底重启该宿主进程。`;
+        }
+
+        if ((diagnostics && diagnostics.ax_trusted === false) || /not allowed assistive access|assistive access|accessibility|辅助访问|辅助功能|不允许辅助访问|-25211|-1719/i.test(message)) {
+          return `${permissionTargetLabel} 还没有“辅助功能”权限。请到“系统设置 > 隐私与安全性 > 辅助功能”里放行它；如果列表里已经是开启状态，先删除这一项再重新添加，并彻底重启该宿主进程。`;
+        }
+
+        if (/System Events got an error|-10827/i.test(message)) {
+          const detailSuffix = systemEventsProbeDetail ? ` 原始探测：${systemEventsProbeDetail}` : "";
+          return `${permissionTargetLabel} 当前无法连通 System Events。请确认你授权的是现在实际运行的宿主进程，而不是旧版 app、旧路径或另一个终端。${detailSuffix}`;
         }
 
         if (/Failed to fetch|NetworkError/i.test(message)) {
           return "本地 macOS bridge 未连接。请先运行 `python3 prototype/tools/wukong_macos_ocr_bridge.py`。";
+        }
+
+        if (systemEventsProbeDetail) {
+          return `${message}；System Events 探测：${systemEventsProbeDetail}`;
         }
 
         return message;
@@ -1500,7 +1557,7 @@
             });
           } catch (error) {
             const reason = error instanceof Error ? error.message : "";
-            throw new Error(normalizeFillAppErrorMessage(reason));
+            throw new Error(normalizeFillAppErrorMessage(reason, getBridgeDiagnostics()));
           }
         }
 
@@ -1520,7 +1577,7 @@
           });
         } catch (error) {
           const reason = error instanceof Error ? error.message : "";
-          throw new Error(normalizeFillAppErrorMessage(reason));
+          throw new Error(normalizeFillAppErrorMessage(reason, getBridgeDiagnostics()));
         }
 
         const responsePayload = await response.json().catch(() => ({}));
@@ -1529,7 +1586,11 @@
             responsePayload && typeof responsePayload.error === "string"
               ? responsePayload.error
               : "填入悟空 App 失败。";
-          throw new Error(normalizeFillAppErrorMessage(errorMessage));
+          const responseDiagnostics =
+            responsePayload && responsePayload.diagnostics && typeof responsePayload.diagnostics === "object"
+              ? responsePayload.diagnostics
+              : getBridgeDiagnostics();
+          throw new Error(normalizeFillAppErrorMessage(errorMessage, responseDiagnostics));
         }
         return responsePayload;
       }
